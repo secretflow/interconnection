@@ -1,0 +1,13 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+package(default_visibility = ["//visibility:public"])
+
+proto_library(
+    name = "common",
+    deps = ["header"],
+)
+
+proto_library(
+    name = "header",
+    srcs = ["header.proto"],
+)

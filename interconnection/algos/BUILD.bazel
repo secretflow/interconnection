@@ -1,0 +1,19 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+package(default_visibility = ["//visibility:public"])
+
+proto_library(
+    name = "algos",
+    deps = [
+        ":psi",
+    ],
+)
+
+proto_library(
+    name = "psi",
+    srcs = ["psi.proto"],
+    deps = [
+        "//interconnection/common",
+        "@com_google_protobuf//:any_proto",
+    ],
+)

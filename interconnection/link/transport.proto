@@ -1,0 +1,56 @@
+// Copyright 2019 Ant Group Co., Ltd.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// 白盒互联互通传输层协议定义
+// White box interconnection transport layer protocol definition
+
+syntax = "proto3";
+
+import "interconnection/common/header.proto";
+
+package org.interconnection.link;
+
+option cc_generic_services = true;
+
+service ReceiverService {
+  // push the data to receiver's local database. 信息传输 RPC 接口
+  rpc Push(PushRequest) returns (PushResponse);
+}
+
+enum TransType {
+  MONO = 0;  // Full transfer mode. 全量传送模式
+  CHUNKED = 1;  // Chunked transfer mode. 分块传送模式
+}
+
+message ChunkInfo {
+  uint64 message_length = 1;  // total message length. 数据总大小
+  uint64 chunk_offset = 2;  // chunk offset. 当前分块的偏移量
+}
+
+message PushRequest {
+  // sender's rank. 发送者的 rank
+  uint64 sender_rank = 1;
+  // key of the message. 消息唯一 ID
+  string key = 2;
+  // value of the message. 消息体
+  bytes value = 3;
+  // transfer mode. 传输模式：全量或分块
+  TransType trans_type = 4;
+  // chunk meta. 消息大小
+  ChunkInfo chunk_info = 5;
+}
+
+message PushResponse {
+  ResponseHeader header = 1;
+}

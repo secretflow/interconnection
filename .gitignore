@@ -1,0 +1,8 @@
+*.pb.h
+*.pb.cc
+
+# bazel
+bazel-*
+
+# Mac DS_Store files
+.DS_Store
