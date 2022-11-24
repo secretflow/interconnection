@@ -1,0 +1,263 @@
+// Copyright 2019 Ant Group Co., Ltd.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// This package only defines actual messages used in PSI.
+//
+// Goals:
+//   - Extensible: this protocol should be able to support new psi algorithms in
+//     the future.
+//
+//   - Language Agnostic: we should not have any language-specific limitation
+//     here, all languages, say Rust/Java/Go/C++ should be able to join this
+//     interconnection protocol.
+//
+// Non-Goals:
+//   - Communication Channel: In this file, we do not define the actual channel
+//     level interconnection, say whether we should use http, grpc or message
+//     queue. This topic will be discussed in the communication topic.
+//
+// Requirements for communication layer:
+//   - Support (string type, byte[] content), self-describe the content type
+//   - Error code system and has a way to abort the training flow
+//   - Asynchoronous support
+
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "interconnection/common/header.proto";
+
+package org.interconnection.algos.psi;
+
+// The initial handshake message after the connection mesh has been established.
+//
+// 初始握手请求
+//
+// Supported algorithms （支持的 PSI 算法）:
+//
+//   - ecdh: The classic ECDH PSI.
+//
+//   - bark-oprf*: TODO
+//
+//   - pcg*: TODO
+message HandshakeRequest {
+
+  // The version of psi handshake message. Start from 1.
+  //
+  // 握手请求版本号
+  int32 version = 1;
+
+  // Supported algorithms （支持的 PSI 算法）: ecdh, pcg*, bark-oprf*
+  repeated string supported_algos = 2;
+
+  // Corresponding psi algo parameters proposals.
+  //
+  // 相应的 PSI 算法详细握手参数，与 supported_algos 一一对应
+  repeated google.protobuf.Any algo_params = 3;
+
+  // How many items do I've.
+  //
+  // 待求交的 PSI 数据总量
+  int64 item_num = 4;
+
+  // Usually we need to make partitions for large-scale PSI. This field defines
+  // the number of bucket we've proposed. Note the larger one will be chosen as
+  // the final bucket number.
+  //
+  // 大规模数据（比如十亿）求交需要决定的分桶数，任何一方都可以给出分桶数，最后以大的一方为主。
+  // 未使用
+  int64 bucket_num = 5;
+
+  // Which rank can receive the psi results.
+  //
+  // 确定 PSI 结果获取方。
+  //
+  // NOTES:
+  //   `-1`: all parties (所有机构都可以拿到交集结果)
+  //   `>= 0`: corresponding rank can get the results (指定机构拿到交集结果)
+  int32 result_to_rank = 7;
+}
+
+// The handshake response from peer.
+//
+// 对手的握手决策响应
+message HandshakeResponse {
+  // response header
+  ResponseHeader header = 1;
+
+  // The final algo determined.
+  //
+  // 决策下来的 PSI 算法
+  string algo = 2;
+
+  // The number of items for each party.
+  //
+  // 每一方的待求交总数
+  int64 item_count = 3;
+
+  // The number of bucket.
+  //
+  // 实际使用的分桶数
+  // 未使用
+  int64 bucket_num = 4;
+
+  // The final algorithm parameters.
+  //
+  // 决策出来的算法参数
+  google.protobuf.Any algo_params = 6;
+}
+
+// ------------------------------------------
+// Roles definition:
+//
+// we use the MPI semantic roles here since we might to support
+// more than 2 parties in the future.
+//
+// For two party, we treat rank 0 (initialtor) as the client(guest) and rank 1
+// as the server(host).
+//
+// ------------------------------------------
+//
+// TCP
+//   - client
+//   - server
+//
+// MPI
+//   - rank 0 (client)
+//   - rank 1 (server)
+//
+// ---------------------------------------------
+//
+//  ECDH PSI Reference states:
+//
+//    Rank 0                           Rank 1
+//
+//    ------------- STATE: INIT ------------------------------
+//                       |
+//                       |
+//    ------------- STATE: BUILD COMMUNICATION CHANNEL -------
+//                       |
+//                       |
+//               HandShake Request
+//                  <-------->
+//
+//   HandShake                        HandShake
+//   Decision                         Decision
+//
+//               HandShake Response
+//                  <-------->
+//
+//    ------------- STATE: HANDSHAKE COMPLETED ----------------
+//
+//    CIPHERTEXT BATCH           CIPHERTEXT BATCH
+//
+//                  <-------->
+//
+//
+//    ------------- STATE: CIPHERTEXT COMPLETED ----------------
+//
+//       Local compute the intersection and output results
+//
+//    ------------- STATE: END ----------------
+//
+
+// ECDH PSI algorithm parameters proposal.
+//
+// ECDH PSI 算法参数握手请求
+message EcdhPsiParamsProposal {
+  // supported versions，支持的算法版本列表
+  // 当前必须为 1
+  repeated string supported_versions = 1;
+
+  // Supported curve types（ EC 曲线 ）:
+  //
+  //   - curve25519;
+  //   - sm2;
+  repeated string curves = 2;
+
+  // Supported hash methods( 支持的哈希算法 ):
+  // 与 curves 字段长度相同，元素一一对应
+  //
+  //   - sha256;
+  //   - sm3;
+  repeated string hash_methods = 3;
+
+  // Nonce for hashing.
+  //
+  // 哈希的额外随机数
+  string nonce = 4;
+}
+
+// ECDH PSI parameters that parties has agreed.
+//
+// ECDH PSI 算法结果参数
+message EcdhPsiParamsResult {
+  // The psi version actual used.
+  string version = 1;
+
+  // The curve type actual used.
+  string curve = 2;
+
+  // The chosen hash method.
+  string hash_method = 3;
+
+  // The chosen salt used in hash method, i.e. hash(content || nonce).
+  string nonce = 4;
+}
+
+// The universal ciphertext for each batch.
+//
+// ECDH PSI 密文传输
+message EcdhPsiCipherBatch {
+
+  // The type hint for each message. (密文类型)
+  //
+  // "enc": the first stage ciphertext
+  //
+  // "dual.enc": the second stage ciphertext
+  //
+  // ECDH PSI 密文阶段类型，主要用来区分一阶段和二阶段的密文.
+  string type = 1;
+
+  // The bucket index. Start from 0.
+  //
+  // Bucket 索引
+  // 未使用
+  int32 bucket_index = 2;
+
+  // The batch index. Start from 0.
+  //
+  // Batch 索引，从 0 开始
+  int32 batch_index = 3;
+
+  // Is last batch flag
+  bool is_last_batch = 4;
+
+  // Count of items in this batch.
+  // count == 0 is allowed for last batch
+  int32 count = 6;
+
+  // The packed all in one ciphertext for this batch.
+  //
+  // The first stage ciphertext takes 256 bits for each ciphertext element.
+  // However, the second stage ciphertext takes 96 bits each. According to PSI
+  // papers, we do not need to send all 256 bit for the final ciphertext. The
+  // number of bits needed to compare is `Log(MN) + 40` given a 40 bits
+  // statistical security parameter. TODO (add paper link here).
+  //
+  // We define each bucket has less than 2^28 items, i.e. about 270 million
+  // (单桶最多 2.7亿) items, which is general enough for various psi algorithms.
+  //
+  // NOTE: we do not use `repeated`` here to save overhead of metadata.
+  bytes ciphertext = 7;
+}
