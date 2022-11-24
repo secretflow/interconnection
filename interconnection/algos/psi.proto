@@ -177,7 +177,7 @@ message HandshakeResponse {
 message EcdhPsiParamsProposal {
   // supported versions，支持的算法版本列表
   // 当前必须为 1
-  repeated string supported_versions = 1;
+  repeated int32 supported_versions = 1;
 
   // Supported curve types（ EC 曲线 ）:
   //
