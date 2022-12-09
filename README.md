@@ -1,16 +1,8 @@
-# Interconnection
+# 隐私计算平台互联互通协议
 
-This repo aims to define standard interconnection protocols for multi-layers in
-privacy-preserving computing.
+本仓库存放异构隐私计算平台互联互通协议（接口）文档。请注意当前的接口、协议文档还不是最终稳定版，不排除某些接口可能会做变更。
 
-It's now just for experimental purposes. Everything might get changed here.
-
-当前已定义:
+当前已经定义的互联互通标准有:
 
 - 传输层协议
 - ECDH-PSI 协议
-
-Currently supported protocols:
-
-- Transport layer protocol
-- ECDH-PSI protocol
