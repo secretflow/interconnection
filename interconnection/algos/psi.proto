@@ -1,10 +1,10 @@
-// Copyright 2019 Ant Group Co., Ltd.
+// Copyright 2022 Ant Group Co., Ltd.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//   http://www.apache.org/licenses/LICENSE-2.0
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -50,6 +50,7 @@ package org.interconnection.algos.psi;
 //   - bark-oprf*: TODO
 //
 //   - pcg*: TODO
+// [Sphinx doc begin anchor: HandshakeRequest]
 message HandshakeRequest {
 
   // The version of psi handshake message. Start from 1.
@@ -87,7 +88,9 @@ message HandshakeRequest {
   //   `>= 0`: corresponding rank can get the results (指定机构拿到交集结果)
   int32 result_to_rank = 7;
 }
+// [Sphinx doc end anchor: HandshakeRequest]
 
+// [Sphinx doc begin anchor: HandshakeResponse]
 // The handshake response from peer.
 //
 // 对手的握手决策响应
@@ -116,6 +119,7 @@ message HandshakeResponse {
   // 决策出来的算法参数
   google.protobuf.Any algo_params = 6;
 }
+// [Sphinx doc end anchor: HandshakeResponse]
 
 // ------------------------------------------
 // Roles definition:
@@ -171,6 +175,7 @@ message HandshakeResponse {
 //    ------------- STATE: END ----------------
 //
 
+// [Sphinx doc begin anchor: EcdhPsiParamsProposal]
 // ECDH PSI algorithm parameters proposal.
 //
 // ECDH PSI 算法参数握手请求
@@ -197,7 +202,9 @@ message EcdhPsiParamsProposal {
   // 哈希的额外随机数
   string nonce = 4;
 }
+// [Sphinx doc end anchor: EcdhPsiParamsProposal]
 
+// [Sphinx doc begin anchor: EcdhPsiParamsResult]
 // ECDH PSI parameters that parties has agreed.
 //
 // ECDH PSI 算法结果参数
@@ -214,7 +221,9 @@ message EcdhPsiParamsResult {
   // The chosen salt used in hash method, i.e. hash(content || nonce).
   string nonce = 4;
 }
+// [Sphinx doc end anchor: EcdhPsiParamsResult]
 
+// [Sphinx doc begin anchor: EcdhPsiCipherBatch]
 // The universal ciphertext for each batch.
 //
 // ECDH PSI 密文传输
@@ -261,3 +270,4 @@ message EcdhPsiCipherBatch {
   // NOTE: we do not use `repeated`` here to save overhead of metadata.
   bytes ciphertext = 7;
 }
+// [Sphinx doc end anchor: EcdhPsiCipherBatch]
