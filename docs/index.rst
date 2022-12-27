@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-隐私计算异构平台互联互通文档
+隐私计算平台互联互通文档
 ===========================================
 
 
@@ -13,3 +13,4 @@
    :caption: 目录
 
    protocols/index
+   ppca/index
