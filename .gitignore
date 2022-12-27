@@ -6,3 +6,6 @@ bazel-*
 
 # Mac DS_Store files
 .DS_Store
+
+# Microsoft office temp files
+~$*.doc*
