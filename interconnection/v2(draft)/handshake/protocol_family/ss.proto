@@ -1,0 +1,123 @@
+// Copyright 2023 Ant Group Co., Ltd.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.interconnection.v2.protocol;
+
+//===================================//
+//  Protos used in HandshakeRequest  //
+//===================================//
+
+message SSProtocolProposal {
+  repeated int32 supported_versions = 1;
+  repeated string supported_protocols = 2;  // Maybe Semi2k, ABY3
+
+  repeated FieldType field_type = 3;
+  repeated TruncationModeProposal trunc_mode = 4;
+  repeated PrgConfigProposal prg_config = 5;
+
+  // Below fields only used for protocol [Semi2k]
+  repeated TripleConfigProposal triple_config = 6;
+}
+
+message TruncationModeProposal {
+  repeated int32 supported_versions = 1;
+
+  string method = 2 ;  //  “TRUNC_PROBABILISTIC” or "TRUNC_PRECISE"
+  repeated string compatible_protocols = 3; // protocols that support this method.  如果留空，表示所有 protocol 都支持
+
+  // Below fields only used for trunc method "TRUNC_PRECISE"
+  //  ...
+}
+
+// TrustedThirdParty configs.
+message TripleConfigProposal {
+  repeated int32 supported_versions = 1;
+
+  // TTP 服务的版本号，与 TTP 服务建立会话时需要该字段
+  int32 sever_version = 2;
+}
+
+// Pseudorandom number generator configuration.
+message PrgConfigProposal {
+  repeated int32 supported_versions = 1;
+
+  // Cryptographic type, maybe "AES128_CTR" or "SM4_CTR"
+  string crypto_type = 2;
+}
+
+//===================================//
+//  Protos used in HandshakeResponse //
+//===================================//
+
+message SSProtocolResult {
+  int32 version = 1;
+  string protocol = 2;  // Maybe Semi2k, ABY3
+
+  FieldType field_type = 3;
+  TruncationMode trunc_mode = 4;
+
+  // Below fields only used for protocol [Semi2k]
+  TripeConfig triple_config = 5;
+
+  // Number of fraction bits of fixed-point number.
+  int64 fxp_fraction_bits = 6;
+}
+
+message TruncationMode {
+  int32 version = 1;
+
+  string method = 2 ;  //  “TRUNC_PROBABILISTIC” or "TRUNC_PRECISE"
+  repeated string compatible_protocols = 3; // protocols that support this method.  如果留空，表示所有 protocol 都支持
+
+  // Below fields only used for trunc method "TRUNC_PRECISE"
+  //  ...
+}
+
+// TrustedThirdParty configs.
+message TripeConfig {
+  int32 version = 1;
+
+  // TrustedThirdParty beaver server's remote ip:port or load balancing uri.
+  string server_host = 2;  // TODO: 是否改为由程序单独配置
+
+  // TTP 服务的版本号，与 TTP 服务建立会话时需要该字段
+  int32 sever_version = 3;
+
+  // 与 TTP 服务的会话ID
+  string session_id = 4;
+
+  // 哪一方调用 TTP 服务的 Adjust 接口，与 TTP 服务建立会话时需要该字段
+  int32 adjust_rank = 5;
+}
+
+// Pseudorandom number generator configuration.
+message PrgConfig {
+  int32 version = 1;
+
+  // Cryptographic type, maybe "AES128_CTR" or "SM4_CTR"
+  string crypto_type = 2;
+}
+
+//===================================//
+//  Protos for ss protocol           //
+//===================================//
+
+enum FieldType {  // TODO: 是否改成 message 类型
+  Unknown = 0;
+  Fm32 = 1;   // Ring 2^32
+  Fm64 = 2;   // Ring 2^64
+  Fm128 = 3;  // Ring 2^128
+}
