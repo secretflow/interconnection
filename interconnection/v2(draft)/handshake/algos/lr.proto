@@ -1,0 +1,114 @@
+// Copyright 2023 Ant Group Co., Ltd.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package org.interconnection.v2.algos;
+
+//===================================//
+//  Protos used in HandshakeRequest  //
+//===================================//
+
+message LrHyperparamsProposal {
+  repeated int32 supported_versions = 1;
+
+  // SGD 优化器类型
+  repeated SgdOptimizer sgd_opt = 2;
+
+  bool support_l0_norm = 3;
+  bool support_l1_norm = 4;
+  bool support_l2_norm = 5;
+}
+
+message LrDataIoProposal {
+  repeated int32 supported_versions = 1;
+
+  // 样本数量
+  int64 sample_size = 2;  // TODO: 待定
+
+  // 特征数量
+  int32 feature_num = 3;
+
+  // 是否有标签(Y)
+  bool has_label = 4;
+}
+
+//===================================//
+//  Protos used in HandshakeResponse //
+//===================================//
+
+message LrHyperparamsResult {
+  // 版本号
+  string version = 1;
+
+  // SGD 优化器
+  SgdOptimizer sgd_opt = 2;
+
+  // SGD 优化器的参数
+  google.protobuf.Any sgd_opt_params = 3;
+
+  // mini-batch 梯度下降的 epoch 参数
+  int64 num_epoch = 4;
+
+  // mini-batch 梯度下降的 bach_size 参数
+  int64 batch_size = 5;
+
+  // mini-batch 梯度下降的 learning_rate参数
+  float learning_rate = 6;
+
+  // L0 正则项
+  float l0_norm = 7;
+
+  // L1 正则项
+  float l1_norm = 8;
+
+  // L2 正则项
+  float l2_norm = 9;
+}
+
+message LrDataIoResult {
+  int32 version = 1;
+
+  // 样本数量
+  int64 sample_size = 2;
+
+  // 各方拥有的特征数量
+  // 例如两个参与方的情况下，若 rank 0 有3个特征，rank 1 有4个特征，则 feature_nums 等于 [3, 4]
+  repeated int32 feature_nums = 3;
+
+  // 哪一方持有标签
+  int64 label_rank = 4;
+}
+
+//===================================//
+//  Protos for LR algorithm          //
+//===================================//
+
+// SGD optimizer. (SGD优化器)
+// ref: https://www.ruder.io/optimizing-gradient-descent/
+enum SgdOptimizer {
+  Unknown = 0;
+  Sgd = 1;
+  Momentum = 2;
+  Nag = 3;  // Nesterov accelerated gradient
+  Adagrad = 4;
+  Adadelta = 5;
+  RMSprop = 6;
+  Adam = 7;
+  AdaMax = 8;
+  Nadam = 9;
+  AmsGrad = 10;
+}

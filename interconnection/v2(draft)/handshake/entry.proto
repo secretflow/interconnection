@@ -1,0 +1,105 @@
+// Copyright 2023 Ant Group Co., Ltd.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package org.interconnection.v2;
+
+message HandshakeVersionCheckHelper {
+  int32 version = 1;
+}
+
+// unified protocol for interconnection
+message HandshakeRequest {
+  // 握手请求版本号, 当前等于 2
+  int32 version = 1;
+
+  //** META INFO **//
+
+  // The sender's rank
+  int32 requester_rank = 2;
+
+  //** AI/BI 算法层 **//
+
+  // algos = ECDH-PSI, SS-LR, etc.
+  repeated string supported_algos = 3;
+
+  // 算法详细握手参数，与 supported_algos 一一对应
+  // SS-LR：learning_rate，optimizer，normalize
+  // ECDH-PSI：Nothing，skip
+  repeated google.protobuf.Any algo_params = 4;
+
+  //** 安全算子层 **//
+
+  // AI/BI 算法所需的 op 列到此处
+  // op = Matmul, Sigmoid
+  // ECDH-PSI：Nothing，skip
+  repeated string ops = 5;
+  repeated google.protobuf.Any op_params = 6;
+
+  //** 密码协议层 **//
+
+  // protocol_family = SS, PHE, ECC, etc.
+  //  SS: Protocol: [Semi2K, ABY3], FieldType, BeaverConfig, SerializeFormat
+  //  ECC: Hash2Curve, EcGroup, SerializeFormat
+  //  PHE: Protocol: [Paillier, EcElgamal], SerializeFormat
+  repeated string protocol_families = 7;
+  repeated google.protobuf.Any protocol_family_params = 8;
+
+  //** 数据 IO **//
+
+  // 定义 AI/BI 算法的输入和结果输出格式，不包括中间交互数据的格式
+  // PSI: item_count、result_to_rank
+  // SS-LR: sample_size、feature_num、has_label, etc.
+  google.protobuf.Any io_params = 9;
+}
+
+message HandshakeResponse {
+
+  //** AI/BI 算法层 **//
+
+  // algos = ECDH-PSI, SS-LR, etc.
+  string algo = 1;
+
+  // 算法详细握手参数
+  // SS-LR：learning_rate，optimizer，normalize
+  // ECDH-PSI：Nothing，skip
+  google.protobuf.Any algo_params = 2;
+
+  //** 安全算子层 **//
+
+  // AI/BI 算法所需的 op 列到此处
+  // op = Matmul, Sigmoid
+  // ECDH-PSI：Nothing，skip
+  repeated string ops = 3;
+  repeated google.protobuf.Any op_params = 4;
+
+  //** 密码协议层 **//
+
+  // protocol_family = SS, PHE, ECC, etc.
+  //  SS: Protocol: [Semi2K, ABY3], FieldType, BeaverConfig, SerializeFormat
+  //  ECC: Hash2Curve, EcGroup, SerializeFormat
+  //  PHE: Protocol: [Paillier, EcElgamal], SerializeFormat
+  repeated string protocol_family = 5;
+  repeated google.protobuf.Any protocol_family_params = 6;
+
+  //** 数据 IO **//
+
+  // 定义 AI/BI 算法的输入和结果输出格式，不包括中间交互数据的格式
+  // PSI: item_count、result_to_rank
+  // SS-LR: sample_size、feature_num、has_label, etc.
+  google.protobuf.Any io_params = 7;
+}

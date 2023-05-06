@@ -15,5 +15,5 @@
 
 本文件规定了异构隐私计算平台进行跨平台的ECDH-PSI的互联互通的算法协议和传输层实现参考。
 
-:download:`点击下载</../PPCA/open-protocols/ECDH-PSI.pdf>`
+:download:`点击下载<https://mdn.alipayobjects.com/huamei_usjdcg/afts/file/A*di_0SpPQ_3UAAAAAAAAAAAAADo6HAQ/ECDH-PSI.pdf>`
 

@@ -9,3 +9,5 @@ bazel-*
 
 # Microsoft office temp files
 ~$*.doc*
+
+docs/_build/
