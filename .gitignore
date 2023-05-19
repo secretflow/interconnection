@@ -11,3 +11,11 @@ bazel-*
 ~$*.doc*
 
 docs/_build/
+
+# Python
+
+.venv
+
+# gettext
+
+*.mo

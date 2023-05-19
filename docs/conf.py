@@ -6,6 +6,14 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from sphinx.util.tags import Tags
+
+    # Sphinx injects this during eval
+    tags: Tags = None
+
 project = "Interconnection"
 copyright = "2022 Ant Group Co., Ltd"
 author = "Secretflow Authors"
@@ -36,6 +44,9 @@ extensions = [
     "sphinx_togglebutton",
     # "myst_parser",
 ]
+
+if tags.has("mdx"):
+    extensions.append("sphinx_mdx")
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
