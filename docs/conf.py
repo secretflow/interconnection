@@ -8,12 +8,6 @@
 
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from sphinx.util.tags import Tags
-
-    # Sphinx injects this during eval
-    tags: Tags = None
-
 project = "Interconnection"
 copyright = "2022 Ant Group Co., Ltd"
 author = "Secretflow Authors"
@@ -44,6 +38,12 @@ extensions = [
     "sphinx_togglebutton",
     # "myst_parser",
 ]
+
+if TYPE_CHECKING:
+    from sphinx.util.tags import Tags
+
+    # Sphinx injects this during eval
+    tags: Tags = None  # type: ignore
 
 if tags.has("mdx"):
     extensions.append("sphinx_mdx")
