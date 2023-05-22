@@ -23,15 +23,23 @@ package org.interconnection.v2.protocol;
 message EccProtocolProposal {
   repeated int32 supported_versions = 1;
 
-  repeated string curves = 2;
+  // enum CurveType
+  repeated int32 curves = 2;
 
-  repeated HashToCurveStrategy hash2curve_strategies = 3;
+  // enum HashToCurveStrategy
+  repeated int32 hash2curve_strategies = 3;
 
-  // 点的序列化格式
-  repeated PointOctetFormat point_octet_format = 4;
+  // enum PointOctetFormat, 点的序列化格式
+  repeated int32 point_octet_format = 4;
 }
 
-enum  HashToCurveStrategy {
+enum CurveType {
+  UnknownCurve = 0;
+  Curve25519 = 1;
+  Sm2 = 2;
+}
+
+enum HashToCurveStrategy {
   Unknown = 0;
 
   // https://eprint.iacr.org/2009/226.pdf
@@ -95,7 +103,7 @@ enum  HashToCurveStrategy {
 
 // Elliptic curve point Octet-String format
 // See SECG standard for details: SEC 1, section 2.3. https://www.secg.org/
-enum  PointOctetFormat {
+enum PointOctetFormat {
   UnKnown = 0;
 
   // 不压缩，多个点连续存储，例如 x1||y1||x2||y2||x3||y3...
@@ -132,9 +140,9 @@ enum  PointOctetFormat {
 message EccProtocolResult {
   int32 version = 1;
   // 选定的曲线
-  string curve = 2;
+  int32 curve = 2;
   // HashToCurve 策略
-  HashToCurveStrategy hash2curve_strategy = 3;
+  int32 hash2curve_strategy = 3;
   // 点的序列化格式
-  PointOctetFormat point_octet_format = 4;
+  int32 point_octet_format = 4;
 }

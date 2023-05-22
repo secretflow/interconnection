@@ -22,9 +22,9 @@ package org.interconnection.v2.protocol;
 
 message SSProtocolProposal {
   repeated int32 supported_versions = 1;
-  repeated string supported_protocols = 2;  // Maybe Semi2k, ABY3
+  repeated int32 supported_protocols = 2;  // enum ProtocolKind
 
-  repeated FieldType field_type = 3;
+  repeated int32 field_type = 3;  // enum FieldType
   repeated TruncationModeProposal trunc_mode = 4;
   repeated PrgConfigProposal prg_config = 5;
 
@@ -35,8 +35,8 @@ message SSProtocolProposal {
 message TruncationModeProposal {
   repeated int32 supported_versions = 1;
 
-  string method = 2 ;  //  “TRUNC_PROBABILISTIC” or "TRUNC_PRECISE"
-  repeated string compatible_protocols = 3; // protocols that support this method.  如果留空，表示所有 protocol 都支持
+  int32 method = 2 ;  // enum TruncMode
+  repeated int32 compatible_protocols = 3; // protocols that support this method.  如果留空，表示所有 protocol 都支持
 
   // Below fields only used for trunc method "TRUNC_PRECISE"
   //  ...
@@ -54,8 +54,8 @@ message TripleConfigProposal {
 message PrgConfigProposal {
   repeated int32 supported_versions = 1;
 
-  // Cryptographic type, maybe "AES128_CTR" or "SM4_CTR"
-  string crypto_type = 2;
+  // enum CryptoType
+  int32 crypto_type = 2;
 }
 
 //===================================//
@@ -64,9 +64,9 @@ message PrgConfigProposal {
 
 message SSProtocolResult {
   int32 version = 1;
-  string protocol = 2;  // Maybe Semi2k, ABY3
+  int32 protocol = 2;  // enum ProtocolKind
 
-  FieldType field_type = 3;
+  int32 field_type = 3;
   TruncationMode trunc_mode = 4;
 
   // Below fields only used for protocol [Semi2k]
@@ -79,8 +79,8 @@ message SSProtocolResult {
 message TruncationMode {
   int32 version = 1;
 
-  string method = 2 ;  //  “TRUNC_PROBABILISTIC” or "TRUNC_PRECISE"
-  repeated string compatible_protocols = 3; // protocols that support this method.  如果留空，表示所有 protocol 都支持
+  int32 method = 2;  // enum TruncMode
+  repeated int32 compatible_protocols = 3; // protocols that support this method.  如果留空，表示所有 protocol 都支持
 
   // Below fields only used for trunc method "TRUNC_PRECISE"
   //  ...
@@ -107,17 +107,35 @@ message TripeConfig {
 message PrgConfig {
   int32 version = 1;
 
-  // Cryptographic type, maybe "AES128_CTR" or "SM4_CTR"
-  string crypto_type = 2;
+  // // enum CryptoType
+  int32 crypto_type = 2;
 }
 
 //===================================//
 //  Protos for ss protocol           //
 //===================================//
 
+enum ProtocolKind {
+  UnknownProtocol = 0;
+  Semi2k = 1;
+  Aby3 = 2;
+}
+
 enum FieldType {  // TODO: 是否改成 message 类型
-  Unknown = 0;
+  UnknownField = 0;
   Fm32 = 1;   // Ring 2^32
   Fm64 = 2;   // Ring 2^64
   Fm128 = 3;  // Ring 2^128
+}
+
+enum TruncMode {
+  UnknownTruncMode = 0;
+  TruncProbabilistic = 1;
+  TruncPrecise = 2;
+}
+
+enum CryptoType {
+  UnknownCrypto = 0;
+  Aes128Ctr = 1;
+  Sm4Ctr = 2;
 }

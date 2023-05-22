@@ -24,7 +24,7 @@ message NdArray {
   // Strides in row major order
   repeated int64 strides = 2;
 
-  // Bit size of each integral element
+  // Bit size of each integral element，use little-endian byte order
   // Maybe 32, 64 or 128
   int32 item_bit_size = 3;
 
