@@ -23,16 +23,24 @@ package org.interconnection.v2.protocol;
 message EccProtocolProposal {
   repeated int32 supported_versions = 1;
 
-  repeated string curves = 2;
+  // enum CurveType
+  repeated int32 curves = 2;
 
-  repeated HashToCurveStrategy hash2curve_strategies = 3;
+  // enum HashToCurveStrategy
+  repeated int32 hash2curve_strategies = 3;
 
-  // 点的序列化格式
-  repeated PointOctetFormat point_octet_format = 4;
+  // enum PointOctetFormat, 点的序列化格式
+  repeated int32 point_octet_format = 4;
 }
 
-enum  HashToCurveStrategy {
-  Unknown = 0;
+enum CurveType {
+  CURVE_TYPE_UNSPECIFIED = 0;
+  CURVE_TYPE_CURVE25519 = 1;
+  CURVE_TYPE_SM2 = 2;
+}
+
+enum HashToCurveStrategy {
+  HASH_TO_CURVE_STRATEGY_UNSPECIFIED = 0;
 
   // https://eprint.iacr.org/2009/226.pdf
   // Auto select the most suitable algorithm:
@@ -41,15 +49,15 @@ enum  HashToCurveStrategy {
   //  - SM: Current only support SM3.
   // Performance: This method is very fast, but it is susceptible to timing
   // attacks.
-  TryAndIncrement_SHA2 = 1;
-  TryAndIncrement_SHA3 = 2;
-  TryAndIncrement_SM = 3;
+  HASH_TO_CURVE_STRATEGY_TRY_AND_INCREMENT_SHA2 = 1;
+  HASH_TO_CURVE_STRATEGY_TRY_AND_INCREMENT_SHA3 = 2;
+  HASH_TO_CURVE_STRATEGY_TRY_AND_INCREMENT_SM = 3;
 
   // Just like TryAndIncrement; but use re-hash instead of increment when try
   // fails.
-  TryAndRehash_SHA2 = 10;
-  TryAndRehash_SHA3 = 11;
-  TryAndRehash_SM = 12;
+  HASH_TO_CURVE_STRATEGY_TRY_AND_REHASH_SHA2 = 10;
+  HASH_TO_CURVE_STRATEGY_TRY_AND_REHASH_SHA3 = 11;
+  HASH_TO_CURVE_STRATEGY_TRY_AND_REHASH_SM = 12;
 
   // Directly output the hash value as the x-coordinate of the point without any
   // verification. And there is no y-coordinate info in output point.
@@ -62,9 +70,9 @@ enum  HashToCurveStrategy {
   // It is currently known that this strategy can be safely used when curve is
   // Curve25519 and scene is ECDH. Do not choose this strategy for other
   // purpose.
-  HashAsPointX_SHA2 = 20;
-  HashAsPointX_SHA3 = 21;
-  HashAsPointX_SM = 22; // Currently only support SM3
+  HASH_TO_CURVE_STRATEGY_HASH_AS_POINT_X_SHA2 = 20;
+  HASH_TO_CURVE_STRATEGY_HASH_AS_POINT_X_SHA3 = 21;
+  HASH_TO_CURVE_STRATEGY_HASH_AS_POINT_X_SM = 22; // Currently only support SM3
 
   // Below is IRTF CFRG hash-to-curve standard (draft):
   // https://datatracker.ietf.org/doc/draft-irtf-cfrg-hash-to-curve/
@@ -79,7 +87,7 @@ enum  HashToCurveStrategy {
   // Performance: This strategy takes 6 times longer than TryAndIncrement on SM2
   // Warning: The output of this strategy is not uniformly distributed on the
   // elliptic curve G.
-  EncodeToCurve = 30;  // Not implemented, do not choose me
+  HASH_TO_CURVE_STRATEGY_ENCODE_TO_CURVE = 30;  // Not implemented, do not choose me
 
   // This strategy is a collection of the following methods, and SPI will
   // automatically select the applicable method according to different curves:
@@ -90,19 +98,19 @@ enum  HashToCurveStrategy {
   //  - SHAKE256_ELL2_RO_
   // Performance: This strategy takes 12 times longer than TryAndIncrement on
   // SM2
-  HashToCurve = 40;  // Not implemented, do not choose me
+  HASH_TO_CURVE_STRATEGY_HASH_TO_CURVE = 40;  // Not implemented, do not choose me
 }
 
 // Elliptic curve point Octet-String format
 // See SECG standard for details: SEC 1, section 2.3. https://www.secg.org/
-enum  PointOctetFormat {
-  UnKnown = 0;
+enum PointOctetFormat {
+  POINT_OCTET_FORMAT_UNSPECIFIED = 0;
 
   // 不压缩，多个点连续存储，例如 x1||y1||x2||y2||x3||y3...
   // x 和 y 都占用整数个 byte，
   // 例如 255bits 的数字占用 32bytes, 小端序，buffer 最后1bit补0
   // 对于 X25529, 本身只有 X 坐标，则多个点序列化只排列 X 坐标
-  Uncompressed = 1;
+  POINT_OCTET_FORMAT_UNCOMPRESSED = 1;
 
   // ANSI X9.62 compressed format
   // The point is encoded as z||x, where the octet z specifies which solution of
@@ -110,11 +118,11 @@ enum  PointOctetFormat {
   // if y is even, output 0x02||x
   // if y is odd, output 0x03||x
   // if point is inf, output 0x00
-  X962Compressed = 3;
+  POINT_OCTET_FORMAT_X962_COMPRESSED = 3;
 
   // ANSI X9.62 uncompressed format
   // The point is encoded as z||x||y, where z is the octet 0x04
-  X962Uncompressed = 4;
+  POINT_OCTET_FORMAT_X962_UNCOMPRESSED = 4;
 
   // ANSI X9.62 hybrid format
   // The point is encoded as z||x||y, where the octet z specifies which solution
@@ -122,7 +130,7 @@ enum  PointOctetFormat {
   // but the first byte encodes the evenness of y just like in compressed
   // format. It's designated by 0x06 and 0x07 in the first byte, and they have
   // the same meaning as 0x02 and 0x03 in compressed.
-  X962Hybrid = 5;
+  POINT_OCTET_FORMAT_X962_HYBRID = 5;
 };
 
 //===================================//
@@ -132,9 +140,9 @@ enum  PointOctetFormat {
 message EccProtocolResult {
   int32 version = 1;
   // 选定的曲线
-  string curve = 2;
+  int32 curve = 2;
   // HashToCurve 策略
-  HashToCurveStrategy hash2curve_strategy = 3;
+  int32 hash2curve_strategy = 3;
   // 点的序列化格式
-  PointOctetFormat point_octet_format = 4;
+  int32 point_octet_format = 4;
 }

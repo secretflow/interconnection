@@ -100,15 +100,5 @@ message LrDataIoResult {
 // SGD optimizer. (SGD优化器)
 // ref: https://www.ruder.io/optimizing-gradient-descent/
 enum SgdOptimizer {
-  Unknown = 0;
-  Sgd = 1;
-  Momentum = 2;
-  Nag = 3;  // Nesterov accelerated gradient
-  Adagrad = 4;
-  Adadelta = 5;
-  RMSprop = 6;
-  Adam = 7;
-  AdaMax = 8;
-  Nadam = 9;
-  AmsGrad = 10;
+  SGD_OPTIMIZER_UNSPECIFIED = 0;
 }
