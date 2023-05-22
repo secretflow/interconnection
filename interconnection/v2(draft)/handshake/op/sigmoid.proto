@@ -39,8 +39,8 @@ message SigmoidParamsResult {
 
 // Sigmoid approximation method.
 enum SigmoidMode {
-  Unknown = 0;
+  SIGMOID_MODE_UNSPECIFIED = 0;
 
   // Minimax approximation one order, f(x) = 0.5 + 0.125 * x
-  Minimax1 = 1;
+  SIGMOID_MODE_MINIMAX_1 = 1;
 }

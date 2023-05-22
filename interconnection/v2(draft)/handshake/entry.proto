@@ -108,19 +108,19 @@ message HandshakeResponse {
 }
 
 enum AlgoType {
-  UnknownAlgo = 0;
-  EcdhPsi = 1;
-  SsLr = 2;
+  ALGO_TYPE_UNSPECIFIED = 0;
+  ALGO_TYPE_ECDH_PSI = 1;
+  ALGO_TYPE_SS_LR = 2;
 }
 
 enum OpType {
-  UnknownOp = 0;
-  Sigmoid = 1;
+  OP_TYPE_UNSPECIFIED = 0;
+  OP_TYPE_SIGMOID = 1;
 }
 
 enum ProtocolFamily {
-  UnknownPf = 0;
-  Ecc = 1;
-  Ss = 2;
-  Phe = 3;
+  PROTOCOL_FAMILY_UNSPECIFIED = 0;
+  PROTOCOL_FAMILY_ECC = 1;
+  PROTOCOL_FAMILY_SS = 2;
+  PROTOCOL_FAMILY_PHE = 3;
 }

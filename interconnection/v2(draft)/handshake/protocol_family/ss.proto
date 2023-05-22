@@ -116,26 +116,26 @@ message PrgConfig {
 //===================================//
 
 enum ProtocolKind {
-  UnknownProtocol = 0;
-  Semi2k = 1;
-  Aby3 = 2;
+  PROTOCOL_KIND_UNSPECIFIED = 0;
+  PROTOCOL_KIND_SEMI2K = 1;
+  PROTOCOL_KIND_ABY3 = 2;
 }
 
 enum FieldType {  // TODO: 是否改成 message 类型
-  UnknownField = 0;
-  Fm32 = 1;   // Ring 2^32
-  Fm64 = 2;   // Ring 2^64
-  Fm128 = 3;  // Ring 2^128
+  FIELD_TYPE_UNSPECIFIED = 0;
+  FIELD_TYPE_32 = 1;   // Ring 2^32
+  FIELD_TYPE_64 = 2;   // Ring 2^64
+  FIELD_TYPE_128 = 3;  // Ring 2^128
 }
 
 enum TruncMode {
-  UnknownTruncMode = 0;
-  TruncProbabilistic = 1;
-  TruncPrecise = 2;
+  TRUNC_MODE_UNSPECIFIED = 0;
+  TRUNC_MODE_PROBABILISTIC = 1;
+  TRUNC_MODE_PRECISE = 2;
 }
 
 enum CryptoType {
-  UnknownCrypto = 0;
-  Aes128Ctr = 1;
-  Sm4Ctr = 2;
+  CRYPTO_TYPE_UNSPECIFIED = 0;
+  CRYPTO_TYPE_AES128_CTR = 1;
+  CRYPTO_TYPE_SM4_CTR = 2;
 }
