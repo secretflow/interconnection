@@ -28,6 +28,7 @@ proto_library(
     name = "lr",
     srcs = ["lr.proto"],
     deps = [
+        ":optimizer",
         "//interconnection/common",
         "@com_google_protobuf//:any_proto",
     ],
@@ -36,4 +37,9 @@ proto_library(
 proto_library(
     name = "psi",
     srcs = ["psi.proto"],
+)
+
+proto_library(
+    name = "optimizer",
+    srcs = ["optimizer.proto"],
 )

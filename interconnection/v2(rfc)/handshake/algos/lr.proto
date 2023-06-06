@@ -25,12 +25,13 @@ package org.interconnection.v2.algos;
 message LrHyperparamsProposal {
   repeated int32 supported_versions = 1;
 
-  // SGD 优化器类型
-  repeated SgdOptimizer sgd_opt = 2;
+  // 支持哪些优化器类型
+  // Ref: enum Optimizer
+  repeated int32 optimizers = 2;
 
-  bool support_l0_norm = 3;
-  bool support_l1_norm = 4;
-  bool support_l2_norm = 5;
+  bool use_l0_norm = 3;
+  bool use_l1_norm = 4;
+  bool use_l2_norm = 5;
 }
 
 message LrDataIoProposal {
@@ -52,13 +53,15 @@ message LrDataIoProposal {
 
 message LrHyperparamsResult {
   // 版本号
-  string version = 1;
+  int32 version = 1;
 
-  // SGD 优化器
-  SgdOptimizer sgd_opt = 2;
+  // 选中的优化器
+  // Ref: enum Optimizer
+  int32 optimizer_name = 2;
 
-  // SGD 优化器的参数
-  google.protobuf.Any sgd_opt_params = 3;
+  // 优化器参数
+  // 参考 optimizer.proto
+  google.protobuf.Any optimizer_params = 3;
 
   // mini-batch 梯度下降的 epoch 参数
   int64 num_epoch = 4;
@@ -66,17 +69,14 @@ message LrHyperparamsResult {
   // mini-batch 梯度下降的 bach_size 参数
   int64 batch_size = 5;
 
-  // mini-batch 梯度下降的 learning_rate参数
-  float learning_rate = 6;
-
   // L0 正则项
-  float l0_norm = 7;
+  double l0_norm = 7;
 
   // L1 正则项
-  float l1_norm = 8;
+  double l1_norm = 8;
 
   // L2 正则项
-  float l2_norm = 9;
+  double l2_norm = 9;
 }
 
 message LrDataIoResult {
@@ -91,14 +91,4 @@ message LrDataIoResult {
 
   // 哪一方持有标签
   int64 label_rank = 4;
-}
-
-//===================================//
-//  Protos for LR algorithm          //
-//===================================//
-
-// SGD optimizer. (SGD优化器)
-// ref: https://www.ruder.io/optimizing-gradient-descent/
-enum SgdOptimizer {
-  SGD_OPTIMIZER_UNSPECIFIED = 0;
 }
