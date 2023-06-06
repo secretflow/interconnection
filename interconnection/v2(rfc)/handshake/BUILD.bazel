@@ -16,23 +16,13 @@ load("@rules_proto//proto:defs.bzl", "proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
-#proto_library(
-#    name = "handshake",
-#    deps = [
-#        ":entry",
-#        "//interconnection/handshake/algos",
-#        "//interconnection/handshake/op",
-#        "//interconnection/handshake/protocol_family",
-#    ],
-#)
-
 proto_library(
     name = "handshake",
     deps = [
         ":entry",
-        "//interconnection/v2(draft)/handshake/algos",
-        "//interconnection/v2(draft)/handshake/op",
-        "//interconnection/v2(draft)/handshake/protocol_family",
+        "//interconnection/v2(rfc)/handshake/algos",
+        "//interconnection/v2(rfc)/handshake/op",
+        "//interconnection/v2(rfc)/handshake/protocol_family",
     ],
 )
 

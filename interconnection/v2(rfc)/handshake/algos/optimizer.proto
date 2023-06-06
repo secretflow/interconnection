@@ -1,0 +1,136 @@
+// Copyright 2023 Ant Group Co., Ltd.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.interconnection.v2.algos;
+
+// Optimizer list
+enum Optimizer {
+  OPTIMIZER_UNSPECIFIED = 0;
+  OPTIMIZER_SGD = 1;
+  OPTIMIZER_MOMENTUM = 2;
+  OPTIMIZER_ADAGRAD = 3;
+  OPTIMIZER_ADADELTA = 4;
+  OPTIMIZER_RMSPROP = 5;
+  OPTIMIZER_ADAM = 6;
+  OPTIMIZER_ADAMAX = 7;
+  OPTIMIZER_NADAM = 8;
+}
+
+// mini-batch (stochastic) gradient descent
+message SgdOptimizer {
+  double learning_rate = 1;
+}
+
+// Gradient descent (with momentum) optimizer.
+message MomentumOptimizer {
+  double learning_rate = 1;
+
+  // float hyperparameter >= 0 that accelerates gradient descent in the relevant
+  // direction and dampens oscillations.
+  double momentum = 2;
+
+  // boolean. Whether to apply Nesterov momentum.
+  bool use_nesterov = 3;
+}
+
+// Adagrad is an optimizer with parameter-specific learning rates, which are
+// adapted relative to how frequently a parameter gets updated during training.
+// The more updates a parameter receives, the smaller the updates.
+message AdagradOptimizer {
+  double learning_rate = 1;
+
+  // Floating point value. Starting value for the accumulators (per-parameter
+  // momentum values). Must be non-negative.
+  double initial_accumulator_value = 2;
+
+  // Small floating point value used to maintain numerical stability.
+  double epsilon = 3;
+}
+
+// Adadelta optimization is a stochastic gradient descent method that is based
+// on adaptive learning rate per dimension to address two drawbacks:
+//
+// - The continual decay of learning rates throughout training.
+// - The need for a manually selected global learning rate.
+//
+// Adadelta is a more robust extension of Adagrad that adapts learning rates
+// based on a moving window of gradient updates, instead of accumulating all
+// past gradients. This way, Adadelta continues learning even when many updates
+// have been done. Compared to Adagrad, in the original version of Adadelta you
+// don't have to set an initial learning rate. In this version, the initial
+// learning rate can be set, as in most other optimizers.
+message AdadeltaOptimizer {
+  double learning_rate = 1;
+  double rho = 2;
+  double epsilon = 3;
+}
+
+// The gist of RMSprop is to:
+//
+// - Maintain a moving (discounted) average of the square of gradients
+// - Divide the gradient by the root of this average
+//
+// This implementation of RMSprop uses plain momentum, not Nesterov momentum.
+// The centered version additionally maintains a moving average of the
+// gradients, and uses that average to estimate the variance.
+message RMSpropOptimizer {
+  double learning_rate = 1;
+  double rho = 2;
+  double momentum = 3;
+  double epsilon = 4;
+  bool centered = 5;
+}
+
+// Adam optimization is a stochastic gradient descent method that is based on
+// adaptive estimation of first-order and second-order moments.
+//
+// According to Kingma et al., 2014 (http://arxiv.org/abs/1412.6980),
+// the method is "computationally efficient, has little memory requirement,
+// invariant to diagonal rescaling of gradients, and is well suited for problems
+// that are large in terms of data/parameters".
+message AdamOptimizer {
+  double learning_rate = 1;
+  // The exponential decay rate for the 1st moment estimates.
+  double beta_1 = 2;
+  // The exponential decay rate for the 2nd moment estimates.
+  double beta_2 = 3;
+  // A small constant for numerical stability.
+  // This epsilon is "epsilon hat" in the Kingma and Ba paper (in the formula
+  // just before Section 2.1), not the epsilon in Algorithm 1 of the paper.
+  double epsilon = 4;
+  // Boolean. Whether to apply AMSGrad variant of this algorithm from the paper
+  // <<On the Convergence of Adam and beyond>>
+  bool amsgrad = 5;
+}
+
+// It is a variant of Adam based on the infinity norm.
+// Adamax is sometimes superior to adam, specially in models with embeddings.
+message AdamaxOptimizer {
+  double learning_rate = 1;
+  double beta_1 = 2;
+  double beta_2 = 3;
+  double epsilon = 4;
+}
+
+// Much like Adam is essentially RMSprop with momentum, Nadam is Adam with
+// Nesterov momentum.
+message NadamOptimizer {
+  double learning_rate = 1;
+  double beta_1 = 2;
+  double beta_2 = 3;
+  double epsilon = 4;
+}
+
