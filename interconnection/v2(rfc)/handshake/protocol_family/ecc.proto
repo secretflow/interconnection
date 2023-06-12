@@ -17,26 +17,42 @@ syntax = "proto3";
 package org.interconnection.v2.protocol;
 
 //===================================//
-//  Protos used in HandshakeRequest  //
+//            Common defs            //
 //===================================//
 
-message EccProtocolProposal {
-  repeated int32 supported_versions = 1;
+// Suit of <curve, hash, hash2curve_strategy>
+message EcSuit {
+  // ref enum CurveType
+  int32 curve = 1;
 
-  // enum CurveType
-  repeated int32 curves = 2;
+  // ref enum HashType
+  int32 hash = 2;
 
-  // enum HashToCurveStrategy
-  repeated int32 hash2curve_strategies = 3;
-
-  // enum PointOctetFormat, 点的序列化格式
-  repeated int32 point_octet_format = 4;
+  // ref enum HashToCurveStrategy
+  int32 hash2curve_strategy = 3;
 }
 
 enum CurveType {
   CURVE_TYPE_UNSPECIFIED = 0;
   CURVE_TYPE_CURVE25519 = 1;
   CURVE_TYPE_SM2 = 2;
+}
+
+enum HashType {
+  HASH_TYPE_UNSPECIFIED = 0;
+  HASH_TYPE_SM3 = 1;
+
+  HASH_TYPE_SHA_224 = 10;
+  HASH_TYPE_SHA_256 = 11;
+  HASH_TYPE_SHA_384 = 12;
+  HASH_TYPE_SHA_512 = 13;
+
+  HASH_TYPE_SHA3_224 = 20;
+  HASH_TYPE_SHA3_256 = 21;
+  HASH_TYPE_SHA3_384 = 22;
+  HASH_TYPE_SHA3_512 = 23;
+
+  HASH_TYPE_SHAKE_256 = 30;
 }
 
 enum HashToCurveStrategy {
@@ -49,15 +65,11 @@ enum HashToCurveStrategy {
   //  - SM: Current only support SM3.
   // Performance: This method is very fast, but it is susceptible to timing
   // attacks.
-  HASH_TO_CURVE_STRATEGY_TRY_AND_INCREMENT_SHA2 = 1;
-  HASH_TO_CURVE_STRATEGY_TRY_AND_INCREMENT_SHA3 = 2;
-  HASH_TO_CURVE_STRATEGY_TRY_AND_INCREMENT_SM = 3;
+  HASH_TO_CURVE_STRATEGY_TRY_AND_INCREMENT = 1;
 
   // Just like TryAndIncrement; but use re-hash instead of increment when try
   // fails.
-  HASH_TO_CURVE_STRATEGY_TRY_AND_REHASH_SHA2 = 10;
-  HASH_TO_CURVE_STRATEGY_TRY_AND_REHASH_SHA3 = 11;
-  HASH_TO_CURVE_STRATEGY_TRY_AND_REHASH_SM = 12;
+  HASH_TO_CURVE_STRATEGY_TRY_AND_REHASH = 2;
 
   // Directly output the hash value as the x-coordinate of the point without any
   // verification. And there is no y-coordinate info in output point.
@@ -70,36 +82,71 @@ enum HashToCurveStrategy {
   // It is currently known that this strategy can be safely used when curve is
   // Curve25519 and scene is ECDH. Do not choose this strategy for other
   // purpose.
-  HASH_TO_CURVE_STRATEGY_HASH_AS_POINT_X_SHA2 = 20;
-  HASH_TO_CURVE_STRATEGY_HASH_AS_POINT_X_SHA3 = 21;
-  HASH_TO_CURVE_STRATEGY_HASH_AS_POINT_X_SM = 22; // Currently only support SM3
+  HASH_TO_CURVE_STRATEGY_DIRECT_HASH_AS_POINT_X = 3;
 
   // Below is IRTF CFRG hash-to-curve standard (draft):
   // https://datatracker.ietf.org/doc/draft-irtf-cfrg-hash-to-curve/
-
-  // This strategy is a collection of the following methods, and SPI will
-  // automatically select the applicable method according to different curves:
-  //  - SHA-256_SSWU_NU_
-  //  - SHA-384_SSWU_NU_
-  //  - SHA-512_SSWU_NU_
-  //  - SHA-512_ELL2_NU_
-  //  - SHAKE256_ELL2_NU_
-  // Performance: This strategy takes 6 times longer than TryAndIncrement on SM2
-  // Warning: The output of this strategy is not uniformly distributed on the
-  // elliptic curve G.
-  HASH_TO_CURVE_STRATEGY_ENCODE_TO_CURVE = 30;  // Not implemented, do not choose me
-
-  // This strategy is a collection of the following methods, and SPI will
-  // automatically select the applicable method according to different curves:
-  //  - SHA-256_SSWU_RO_
-  //  - SHA-384_SSWU_RO_
-  //  - SHA-512_SSWU_RO_
-  //  - SHA-512_ELL2_RO_
-  //  - SHAKE256_ELL2_RO_
-  // Performance: This strategy takes 12 times longer than TryAndIncrement on
-  // SM2
-  HASH_TO_CURVE_STRATEGY_HASH_TO_CURVE = 40;  // Not implemented, do not choose me
+  //
+  // IRTF suits consist of:
+  // "CURVE_ID || "_" || HASH_ID || "_" || MAP_ID || "_" || ENC_VAR"
+  // We regard MAP_ID and ENC_VAR as a whole as HASH_TO_CURVE strategy.
+  // MAP_ID has the following methods:
+  // - "SVDW" for Shallue-van de Woestijne method
+  // - "SSWU" for Simplified SWU
+  // - "ELL2" for Elligator 2 method
+  // ENC_VAR has the following methods:
+  // - "RO" for hash_to_curve
+  //   Performance: This strategy takes 12 times longer than TryAndIncrement on
+  //   SM2
+  // - "NU" for encode_to_curve
+  //   Performance: This strategy takes 6 times longer than TryAndIncrement on
+  //   SM2
+  //   Warning: The output of this strategy is not uniformly distributed on the
+  //   elliptic curve G.
+  HASH_TO_CURVE_STRATEGY_IRTF_SSWU_RO = 10;
+  HASH_TO_CURVE_STRATEGY_IRTF_SSWU_NU = 11;
+  HASH_TO_CURVE_STRATEGY_IRTF_ELL2_RO = 12;
+  HASH_TO_CURVE_STRATEGY_IRTF_ELL2_NU = 13;
 }
+
+// Legal EcSuit triplet collocations
+// 合法的 EcSuit 三元组搭配（开放列表）
+//
+// Recommended combinations:
+// 推荐搭配
+// +------------+---------+------------------------+
+// |    Curve   |   Hash  |       Hash2Curve       |
+// +------------+---------+------------------------+
+// | Curve25519 | SHA-256 | DIRECT_HASH_AS_POINT_X |
+// +------------+---------+------------------------+
+// |     SM2    |   SM3   |    TRY_AND_INCREMENT   |
+// +------------+---------+------------------------+
+//
+// Other combinations:
+// 其它搭配
+// Enterprises/platforms with spare energy can consider implementing the
+// following solutions, especially the IRTF strategies, which provides higher
+// security and is also recommended.
+// 有余力的企业/平台可以考虑实现下述方案，特别是 IRTF 方案提供更高的安全性，是非常有意义的
+// +------------+---------+------------------------+
+// |    Curve   |   Hash  |       Hash2Curve       |
+// +------------+---------+------------------------+
+// | Curve25519 | SHA-256 | DIRECT_HASH_AS_POINT_X |
+// +------------+---------+------------------------+
+// | Curve25519 |   SM3   | DIRECT_HASH_AS_POINT_X |
+// +------------+---------+------------------------+
+// |     SM2    | SHA-256 |    TRY_AND_INCREMENT   |
+// +------------+---------+------------------------+
+// |     SM2    | SHA-256 |     TRY_AND_REHASH     |
+// +------------+---------+------------------------+
+// |     SM2    |   SM3   |    TRY_AND_INCREMENT   |
+// +------------+---------+------------------------+
+// |     SM2    |   SM3   |     TRY_AND_REHASH     |
+// +------------+---------+------------------------+
+// |     SM2    |   SM3   |      IRTF_SSWU_RO      |
+// +------------+---------+------------------------+
+// | Curve25519 | SHA-256 |      IRTF_ELL2_RO      |
+// +------------+---------+------------------------+
 
 // Elliptic curve point Octet-String format
 // See SECG standard for details: SEC 1, section 2.3. https://www.secg.org/
@@ -134,15 +181,37 @@ enum PointOctetFormat {
 };
 
 //===================================//
+//  Protos used in HandshakeRequest  //
+//===================================//
+
+message EccProtocolProposal {
+  repeated int32 supported_versions = 1;
+
+  // list of <curve, hash, hash2curve_strategy> suits
+  repeated EcSuit ec_suits = 2;
+
+  // ref enum PointOctetFormat
+  // 点的序列化格式
+  repeated int32 point_octet_format = 5;
+
+  // Whether to enable the optimization method: secondary ciphertext truncation
+  bool support_point_truncation = 6;
+}
+
+//===================================//
 //  Protos used in HandshakeResponse  //
 //===================================//
 
 message EccProtocolResult {
   int32 version = 1;
-  // 选定的曲线
-  int32 curve = 2;
-  // HashToCurve 策略
-  int32 hash2curve_strategy = 3;
-  // 点的序列化格式
-  int32 point_octet_format = 4;
+
+  // The chosen suit
+  EcSuit ec_suits = 2;
+
+  // The chosen octet format
+  int32 point_octet_format = 5;
+
+  // optimization method: secondary ciphertext truncation
+  // -1 means disable this optimization (do not truncation)
+  int32 bit_length_after_truncated = 6;
 }

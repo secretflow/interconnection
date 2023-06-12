@@ -28,8 +28,11 @@ message SSProtocolProposal {
   repeated TruncationModeProposal trunc_mode = 4;
   repeated PrgConfigProposal prg_config = 5;
 
+  // 秘密分享分片的序列化格式, enum ShardSerializeFormat
+  repeated int32 shard_serialize_format = 6;
+
   // Below fields only used for protocol [Semi2k]
-  repeated TripleConfigProposal triple_config = 6;
+  repeated TripleConfigProposal triple_config = 50;
 }
 
 message TruncationModeProposal {
@@ -69,11 +72,14 @@ message SSProtocolResult {
   int32 field_type = 3;
   TruncationMode trunc_mode = 4;
 
-  // Below fields only used for protocol [Semi2k]
-  TripeConfig triple_config = 5;
-
   // Number of fraction bits of fixed-point number.
-  int64 fxp_fraction_bits = 6;
+  int64 fxp_fraction_bits = 5;
+
+  // enum CommFormat
+  int32 comm_format = 6;
+
+  // Below fields only used for protocol [Semi2k]
+  TripeConfig triple_config = 50;
 }
 
 message TruncationMode {
@@ -121,7 +127,7 @@ enum ProtocolKind {
   PROTOCOL_KIND_ABY3 = 2;
 }
 
-enum FieldType {  // TODO: 是否改成 message 类型
+enum FieldType {
   FIELD_TYPE_UNSPECIFIED = 0;
   FIELD_TYPE_32 = 1;   // Ring 2^32
   FIELD_TYPE_64 = 2;   // Ring 2^64
@@ -138,4 +144,10 @@ enum CryptoType {
   CRYPTO_TYPE_UNSPECIFIED = 0;
   CRYPTO_TYPE_AES128_CTR = 1;
   CRYPTO_TYPE_SM4_CTR = 2;
+}
+
+// 秘密分享分片的序列化格式
+enum ShardSerializeFormat {
+  SHARED_SERIALIZE_FORMAT_UNSPECIFIED = 0;
+  SHARED_SERIALIZE_FORMAT_RAW = 1;
 }
