@@ -29,9 +29,12 @@ message LrHyperparamsProposal {
   // Ref: enum Optimizer
   repeated int32 optimizers = 2;
 
-  bool use_l0_norm = 3;
-  bool use_l1_norm = 4;
-  bool use_l2_norm = 5;
+  // Ref: enum LastBatchPolicy
+  repeated int32 last_batch_policy = 3;
+
+  bool use_l0_norm = 4;
+  bool use_l1_norm = 5;
+  bool use_l2_norm = 6;
 }
 
 message LrDataIoProposal {
@@ -69,6 +72,9 @@ message LrHyperparamsResult {
   // mini-batch 梯度下降的 bach_size 参数
   int64 batch_size = 5;
 
+  // ref enum LastBatchPolicy
+  int32 last_batch_policy = 6;
+
   // L0 正则项
   double l0_norm = 7;
 
@@ -91,4 +97,10 @@ message LrDataIoResult {
 
   // 哪一方持有标签
   int64 label_rank = 4;
+}
+
+// Policy to process the partial last batch of each epoch
+enum LastBatchPolicy {
+  LAST_BATCH_POLICY_UNSPECIFIED = 0;
+  LAST_BATCH_POLICY_DISCARD = 1;
 }
