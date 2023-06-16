@@ -71,12 +71,13 @@ message SSProtocolResult {
 
   int32 field_type = 3;
   TruncationMode trunc_mode = 4;
+  PrgConfig prg_config = 5;
 
   // Number of fraction bits of fixed-point number.
-  int64 fxp_fraction_bits = 5;
+  int32 fxp_fraction_bits = 6;
 
-  // enum CommFormat
-  int32 comm_format = 6;
+  // 秘密分享分片的序列化格式, enum ShardSerializeFormat
+  int32 shard_serialize_format = 7;
 
   // Below fields only used for protocol [Semi2k]
   TripeConfig triple_config = 50;
@@ -97,7 +98,7 @@ message TripeConfig {
   int32 version = 1;
 
   // TrustedThirdParty beaver server's remote ip:port or load balancing uri.
-  string server_host = 2;  // TODO: 是否改为由程序单独配置
+  string server_host = 2;
 
   // TTP 服务的版本号，与 TTP 服务建立会话时需要该字段
   int32 sever_version = 3;
