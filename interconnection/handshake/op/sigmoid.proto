@@ -24,7 +24,7 @@ message SigmoidParamsProposal {
   repeated int32 supported_versions = 1;
 
   // enum SigmoidMode
-  repeated int32 sigmoid_mode = 2;
+  repeated int32 sigmoid_modes = 2;
 }
 
 //===================================//

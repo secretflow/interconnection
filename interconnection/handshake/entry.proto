@@ -65,7 +65,7 @@ message HandshakeRequest {
   // 定义 AI/BI 算法的输入和结果输出格式，不包括中间交互数据的格式
   // PSI: item_count、result_to_rank
   // SS-LR: sample_size、feature_num、has_label, etc.
-  google.protobuf.Any io_params = 9;
+  google.protobuf.Any io_param = 9;
 }
 
 message HandshakeResponse {
@@ -80,7 +80,7 @@ message HandshakeResponse {
   // 算法详细握手参数
   // SS-LR：learning_rate，optimizer，normalize
   // ECDH-PSI：Nothing，skip
-  google.protobuf.Any algo_params = 3;
+  google.protobuf.Any algo_param = 3;
 
   //** 安全算子层 **//
 
@@ -96,7 +96,7 @@ message HandshakeResponse {
   //  SS: Protocol: [Semi2K, ABY3], FieldType, BeaverConfig, SerializeFormat
   //  ECC: Hash2Curve, EcGroup, SerializeFormat
   //  PHE: Protocol: [Paillier, EcElgamal], SerializeFormat
-  repeated int32 protocol_family = 6;
+  repeated int32 protocol_families = 6;
   repeated google.protobuf.Any protocol_family_params = 7;
 
   //** 数据 IO **//
@@ -104,7 +104,7 @@ message HandshakeResponse {
   // 定义 AI/BI 算法的输入和结果输出格式，不包括中间交互数据的格式
   // PSI: item_count、result_to_rank
   // SS-LR: sample_size、feature_num、has_label, etc.
-  google.protobuf.Any io_params = 8;
+  google.protobuf.Any io_param = 8;
 }
 
 enum AlgoType {

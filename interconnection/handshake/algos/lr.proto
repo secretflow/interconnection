@@ -30,7 +30,7 @@ message LrHyperparamsProposal {
   repeated int32 optimizers = 2;
 
   // Ref: enum LastBatchPolicy
-  repeated int32 last_batch_policy = 3;
+  repeated int32 last_batch_policies = 3;
 
   bool use_l0_norm = 4;
   bool use_l1_norm = 5;
@@ -41,7 +41,7 @@ message LrDataIoProposal {
   repeated int32 supported_versions = 1;
 
   // 样本数量
-  int64 sample_size = 2;  // TODO: 待定
+  int64 sample_size = 2;
 
   // 特征数量
   int32 feature_num = 3;
@@ -64,7 +64,7 @@ message LrHyperparamsResult {
 
   // 优化器参数
   // 参考 optimizer.proto
-  google.protobuf.Any optimizer_params = 3;
+  google.protobuf.Any optimizer_param = 3;
 
   // mini-batch 梯度下降的 epoch 参数
   int64 num_epoch = 4;
@@ -96,7 +96,7 @@ message LrDataIoResult {
   repeated int32 feature_nums = 3;
 
   // 哪一方持有标签
-  int64 label_rank = 4;
+  int32 label_rank = 4;
 }
 
 // Policy to process the partial last batch of each epoch
