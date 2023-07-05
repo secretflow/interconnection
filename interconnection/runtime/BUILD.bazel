@@ -20,22 +20,10 @@ proto_library(
     name = "runtime",
     deps = [
         ":ecdh_psi",
-        ":ndarray",
-        ":prg",
     ],
 )
 
 proto_library(
     name = "ecdh_psi",
     srcs = ["ecdh_psi.proto"],
-)
-
-proto_library(
-    name = "ndarray",
-    srcs = ["ndarray.proto"],
-)
-
-proto_library(
-    name = "prg",
-    srcs = ["prg.proto"],
 )

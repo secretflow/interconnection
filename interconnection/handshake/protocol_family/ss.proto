@@ -24,15 +24,15 @@ message SSProtocolProposal {
   repeated int32 supported_versions = 1;
   repeated int32 supported_protocols = 2;  // enum ProtocolKind
 
-  repeated int32 field_type = 3;  // enum FieldType
-  repeated TruncationModeProposal trunc_mode = 4;
-  repeated PrgConfigProposal prg_config = 5;
+  repeated int32 field_types = 3;  // enum FieldType
+  repeated TruncationModeProposal trunc_modes = 4;
+  repeated PrgConfigProposal prg_configs = 5;
 
   // 秘密分享分片的序列化格式, enum ShardSerializeFormat
-  repeated int32 shard_serialize_format = 6;
+  repeated int32 shard_serialize_formats = 6;
 
   // Below fields only used for protocol [Semi2k]
-  repeated TripleConfigProposal triple_config = 50;
+  repeated TripleConfigProposal triple_configs = 50;
 }
 
 message TruncationModeProposal {
@@ -70,8 +70,8 @@ message SSProtocolResult {
   int32 protocol = 2;  // enum ProtocolKind
 
   int32 field_type = 3;
-  TruncationMode trunc_mode = 4;
-  PrgConfig prg_config = 5;
+  TruncationModeResult trunc_mode = 4;
+  PrgConfigResult prg_config = 5;
 
   // Number of fraction bits of fixed-point number.
   int32 fxp_fraction_bits = 6;
@@ -80,21 +80,17 @@ message SSProtocolResult {
   int32 shard_serialize_format = 7;
 
   // Below fields only used for protocol [Semi2k]
-  TripeConfig triple_config = 50;
+  TripleConfigResult triple_config = 50;
 }
 
-message TruncationMode {
+message TruncationModeResult {
   int32 version = 1;
 
   int32 method = 2;  // enum TruncMode
-  repeated int32 compatible_protocols = 3; // protocols that support this method.  如果留空，表示所有 protocol 都支持
-
-  // Below fields only used for trunc method "TRUNC_PRECISE"
-  //  ...
 }
 
 // TrustedThirdParty configs.
-message TripeConfig {
+message TripleConfigResult {
   int32 version = 1;
 
   // TrustedThirdParty beaver server's remote ip:port or load balancing uri.
@@ -111,7 +107,7 @@ message TripeConfig {
 }
 
 // Pseudorandom number generator configuration.
-message PrgConfig {
+message PrgConfigResult {
   int32 version = 1;
 
   // // enum CryptoType

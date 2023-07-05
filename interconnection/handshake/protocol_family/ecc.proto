@@ -165,11 +165,11 @@ enum PointOctetFormat {
   // if y is even, output 0x02||x
   // if y is odd, output 0x03||x
   // if point is inf, output 0x00
-  POINT_OCTET_FORMAT_X962_COMPRESSED = 3;
+  POINT_OCTET_FORMAT_X962_COMPRESSED = 2;
 
   // ANSI X9.62 uncompressed format
   // The point is encoded as z||x||y, where z is the octet 0x04
-  POINT_OCTET_FORMAT_X962_UNCOMPRESSED = 4;
+  POINT_OCTET_FORMAT_X962_UNCOMPRESSED = 3;
 
   // ANSI X9.62 hybrid format
   // The point is encoded as z||x||y, where the octet z specifies which solution
@@ -177,7 +177,7 @@ enum PointOctetFormat {
   // but the first byte encodes the evenness of y just like in compressed
   // format. It's designated by 0x06 and 0x07 in the first byte, and they have
   // the same meaning as 0x02 and 0x03 in compressed.
-  POINT_OCTET_FORMAT_X962_HYBRID = 5;
+  POINT_OCTET_FORMAT_X962_HYBRID = 4;
 };
 
 //===================================//
@@ -192,10 +192,10 @@ message EccProtocolProposal {
 
   // ref enum PointOctetFormat
   // 点的序列化格式
-  repeated int32 point_octet_format = 5;
+  repeated int32 point_octet_formats = 3;
 
   // Whether to enable the optimization method: secondary ciphertext truncation
-  bool support_point_truncation = 6;
+  bool support_point_truncation = 4;
 }
 
 //===================================//
@@ -206,12 +206,12 @@ message EccProtocolResult {
   int32 version = 1;
 
   // The chosen suit
-  EcSuit ec_suits = 2;
+  EcSuit ec_suit = 2;
 
   // The chosen octet format
-  int32 point_octet_format = 5;
+  int32 point_octet_format = 3;
 
   // optimization method: secondary ciphertext truncation
   // -1 means disable this optimization (do not truncation)
-  int32 bit_length_after_truncated = 6;
+  int32 bit_length_after_truncated = 4;
 }

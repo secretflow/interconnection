@@ -20,9 +20,9 @@ proto_library(
     name = "handshake",
     deps = [
         ":entry",
-        "//interconnection/v2(rfc)/handshake/algos",
-        "//interconnection/v2(rfc)/handshake/op",
-        "//interconnection/v2(rfc)/handshake/protocol_family",
+        "//interconnection/handshake/algos",
+        "//interconnection/handshake/op",
+        "//interconnection/handshake/protocol_family",
     ],
 )
 
