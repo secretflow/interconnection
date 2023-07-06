@@ -6,15 +6,14 @@
 
 当前已经定义的互联互通协议（接口）有:
 
-- 传输层协议
-- ECDH-PSI 协议
-- SS-LR 协议
+- [ECDH-PSI 协议](./PPCA/open-protocols/ECDH-PSI.pdf)
+- [SS-LR 协议](./PPCA/open-protocols/SS-LR.pdf)
 
 ## 目录结构
 
 ```
 .
-├── PPCA   # 存放其他组织的标准协议文件
+├── PPCA   # 存放隐私计算联盟归口的标准协议文件
 ├── docs   # 文档网站的网页源代码
 └── interconnection    # 所有接口文件
     ├── common     # 通用的接口定义
