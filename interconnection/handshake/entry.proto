@@ -23,6 +23,7 @@ message HandshakeVersionCheckHelper {
   int32 version = 1;
 }
 
+// [Sphinx doc begin anchor: HandshakeRequest]
 // unified protocol for interconnection
 message HandshakeRequest {
   // 握手请求版本号, 当前等于 2
@@ -67,7 +68,9 @@ message HandshakeRequest {
   // SS-LR: sample_size、feature_num、has_label, etc.
   google.protobuf.Any io_param = 9;
 }
+// [Sphinx doc end anchor: HandshakeRequest]
 
+// [Sphinx doc begin anchor: HandshakeResponse]
 message HandshakeResponse {
   // response header
   ResponseHeader header = 1;
@@ -106,21 +109,28 @@ message HandshakeResponse {
   // SS-LR: sample_size、feature_num、has_label, etc.
   google.protobuf.Any io_param = 8;
 }
+// [Sphinx doc end anchor: HandshakeResponse]
 
+// [Sphinx doc begin anchor: AlgoType]
 enum AlgoType {
   ALGO_TYPE_UNSPECIFIED = 0;
   ALGO_TYPE_ECDH_PSI = 1;
   ALGO_TYPE_SS_LR = 2;
 }
+// [Sphinx doc end anchor: AlgoType]
 
+// [Sphinx doc begin anchor: OpType]
 enum OpType {
   OP_TYPE_UNSPECIFIED = 0;
   OP_TYPE_SIGMOID = 1;
 }
+// [Sphinx doc end anchor: OpType]
 
+// [Sphinx doc begin anchor: ProtocolFamily]
 enum ProtocolFamily {
   PROTOCOL_FAMILY_UNSPECIFIED = 0;
   PROTOCOL_FAMILY_ECC = 1;
   PROTOCOL_FAMILY_SS = 2;
   PROTOCOL_FAMILY_PHE = 3;
 }
+// [Sphinx doc end anchor: ProtocolFamily]

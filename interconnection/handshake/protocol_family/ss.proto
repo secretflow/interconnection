@@ -20,6 +20,7 @@ package org.interconnection.v2.protocol;
 //  Protos used in HandshakeRequest  //
 //===================================//
 
+// [Sphinx doc begin anchor: SSProtocolProposal]
 message SSProtocolProposal {
   repeated int32 supported_versions = 1;
   repeated int32 supported_protocols = 2;  // enum ProtocolKind
@@ -34,7 +35,9 @@ message SSProtocolProposal {
   // Below fields only used for protocol [Semi2k]
   repeated TripleConfigProposal triple_configs = 50;
 }
+// [Sphinx doc end anchor: SSProtocolProposal]
 
+// [Sphinx doc begin anchor: TruncationModeProposal]
 message TruncationModeProposal {
   repeated int32 supported_versions = 1;
 
@@ -44,7 +47,9 @@ message TruncationModeProposal {
   // Below fields only used for trunc method "TRUNC_PRECISE"
   //  ...
 }
+// [Sphinx doc end anchor: TruncationModeProposal]
 
+// [Sphinx doc begin anchor: TripleConfigProposal]
 // TrustedThirdParty configs.
 message TripleConfigProposal {
   repeated int32 supported_versions = 1;
@@ -52,7 +57,9 @@ message TripleConfigProposal {
   // TTP 服务的版本号，与 TTP 服务建立会话时需要该字段
   int32 sever_version = 2;
 }
+// [Sphinx doc end anchor: TripleConfigProposal]
 
+// [Sphinx doc begin anchor: PrgConfigProposal]
 // Pseudorandom number generator configuration.
 message PrgConfigProposal {
   repeated int32 supported_versions = 1;
@@ -60,11 +67,13 @@ message PrgConfigProposal {
   // enum CryptoType
   int32 crypto_type = 2;
 }
+// [Sphinx doc end anchor: PrgConfigProposal]
 
 //===================================//
 //  Protos used in HandshakeResponse //
 //===================================//
 
+// [Sphinx doc begin anchor: SSProtocolResult]
 message SSProtocolResult {
   int32 version = 1;
   int32 protocol = 2;  // enum ProtocolKind
@@ -82,13 +91,17 @@ message SSProtocolResult {
   // Below fields only used for protocol [Semi2k]
   TripleConfigResult triple_config = 50;
 }
+// [Sphinx doc end anchor: SSProtocolResult]
 
+// [Sphinx doc begin anchor: TruncationModeResult]
 message TruncationModeResult {
   int32 version = 1;
 
   int32 method = 2;  // enum TruncMode
 }
+// [Sphinx doc end anchor: TruncationModeResult]
 
+// [Sphinx doc begin anchor: TripleConfigResult]
 // TrustedThirdParty configs.
 message TripleConfigResult {
   int32 version = 1;
@@ -105,7 +118,9 @@ message TripleConfigResult {
   // 哪一方调用 TTP 服务的 Adjust 接口，与 TTP 服务建立会话时需要该字段
   int32 adjust_rank = 5;
 }
+// [Sphinx doc end anchor: TripleConfigResult]
 
+// [Sphinx doc begin anchor: PrgConfigResult]
 // Pseudorandom number generator configuration.
 message PrgConfigResult {
   int32 version = 1;
@@ -113,38 +128,49 @@ message PrgConfigResult {
   // // enum CryptoType
   int32 crypto_type = 2;
 }
+// [Sphinx doc end anchor: PrgConfigResult]
 
 //===================================//
 //  Protos for ss protocol           //
 //===================================//
 
+// [Sphinx doc begin anchor: ProtocolKind]
 enum ProtocolKind {
   PROTOCOL_KIND_UNSPECIFIED = 0;
   PROTOCOL_KIND_SEMI2K = 1;
   PROTOCOL_KIND_ABY3 = 2;
 }
+// [Sphinx doc end anchor: ProtocolKind]
 
+// [Sphinx doc begin anchor: FieldType]
 enum FieldType {
   FIELD_TYPE_UNSPECIFIED = 0;
   FIELD_TYPE_32 = 1;   // Ring 2^32
   FIELD_TYPE_64 = 2;   // Ring 2^64
   FIELD_TYPE_128 = 3;  // Ring 2^128
 }
+// [Sphinx doc end anchor: FieldType]
 
+// [Sphinx doc begin anchor: TruncMode]
 enum TruncMode {
   TRUNC_MODE_UNSPECIFIED = 0;
   TRUNC_MODE_PROBABILISTIC = 1;
   TRUNC_MODE_PRECISE = 2;
 }
+// [Sphinx doc end anchor: TruncMode]
 
+// [Sphinx doc begin anchor: CryptoType]
 enum CryptoType {
   CRYPTO_TYPE_UNSPECIFIED = 0;
   CRYPTO_TYPE_AES128_CTR = 1;
   CRYPTO_TYPE_SM4_CTR = 2;
 }
+// [Sphinx doc end anchor: CryptoType]
 
+// [Sphinx doc begin anchor: ShardSerializeFormat]
 // 秘密分享分片的序列化格式
 enum ShardSerializeFormat {
   SHARED_SERIALIZE_FORMAT_UNSPECIFIED = 0;
   SHARED_SERIALIZE_FORMAT_RAW = 1;
 }
+// [Sphinx doc end anchor: ShardSerializeFormat]

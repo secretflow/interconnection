@@ -16,6 +16,7 @@ syntax = "proto3";
 
 package org.interconnection.v2.algos;
 
+// [Sphinx doc begin anchor: PsiDataIoProposal]
 message PsiDataIoProposal {
   repeated int32 supported_versions = 1;
 
@@ -33,7 +34,9 @@ message PsiDataIoProposal {
   //   `>= 0`: corresponding rank can get the results (指定机构拿到交集结果)
   int32 result_to_rank = 3;
 }
+// [Sphinx doc end anchor: PsiDataIoProposal]
 
+// [Sphinx doc begin anchor: PsiDataIoResult]
 message PsiDataIoResult {
   int32 version = 1;
 
@@ -44,3 +47,4 @@ message PsiDataIoResult {
   //   `>= 0`: corresponding rank can get the results (指定机构拿到交集结果)
   int32 result_to_rank = 2;
 }
+// [Sphinx doc end anchor: PsiDataIoResult]

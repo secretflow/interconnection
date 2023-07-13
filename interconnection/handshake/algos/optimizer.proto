@@ -16,6 +16,7 @@ syntax = "proto3";
 
 package org.interconnection.v2.algos;
 
+// [Sphinx doc begin anchor: Optimizer]
 // Optimizer list
 enum Optimizer {
   OPTIMIZER_UNSPECIFIED = 0;
@@ -28,11 +29,14 @@ enum Optimizer {
   OPTIMIZER_ADAMAX = 7;
   OPTIMIZER_NADAM = 8;
 }
+// [Sphinx doc end anchor: Optimizer]
 
+// [Sphinx doc begin anchor: SgdOptimizer]
 // mini-batch (stochastic) gradient descent
 message SgdOptimizer {
   double learning_rate = 1;
 }
+// [Sphinx doc end anchor: SgdOptimizer]
 
 // Gradient descent (with momentum) optimizer.
 message MomentumOptimizer {

@@ -20,23 +20,28 @@ package org.interconnection.v2.op;
 //  Protos used in HandshakeRequest  //
 //===================================//
 
+// [Sphinx doc begin anchor: SigmoidParamsProposal]
 message SigmoidParamsProposal {
   repeated int32 supported_versions = 1;
 
   // enum SigmoidMode
   repeated int32 sigmoid_modes = 2;
 }
+// [Sphinx doc end anchor: SigmoidParamsProposal]
 
 //===================================//
 //  Protos used in HandshakeResponse //
 //===================================//
 
+// [Sphinx doc begin anchor: SigmoidParamsResult]
 message SigmoidParamsResult {
   int32 version = 1;
 
   int32 sigmoid_mode = 2;
 }
+// [Sphinx doc end anchor: SigmoidParamsResult]
 
+// [Sphinx doc begin anchor: SigmoidMode]
 // Sigmoid approximation method.
 enum SigmoidMode {
   SIGMOID_MODE_UNSPECIFIED = 0;
@@ -44,3 +49,4 @@ enum SigmoidMode {
   // Minimax approximation one order, f(x) = 0.5 + 0.125 * x
   SIGMOID_MODE_MINIMAX_1 = 1;
 }
+// [Sphinx doc end anchor: SigmoidMode]
