@@ -12,8 +12,16 @@
 ---------------------------------------------------
 
 开放协议 第1部分：ECDH-PSI
+^^^^^^^^^^^^^^^^^^^^^
 
-本文件规定了异构隐私计算平台进行跨平台的ECDH-PSI的互联互通的算法协议和传输层实现参考。
+本文件规定了异构隐私计算平台进行跨平台的 ECDH-PSI 的互联互通的算法协议和传输层实现参考。
 
-:download:`点击下载<https://mdn.alipayobjects.com/huamei_usjdcg/afts/file/A*di_0SpPQ_3UAAAAAAAAAAAAADo6HAQ/ECDH-PSI.pdf>`
+:download:`点击下载<../../PPCA/open-protocols/ECDH-PSI.pdf>`
+
+开放协议 第2部分：SS-LR
+^^^^^^^^^^^^^^^^^^^^^
+
+本文件规定了异构隐私计算平台进行跨平台的 SS-LR 的互联互通的算法协议和传输层实现参考。
+
+:download:`点击下载<../../PPCA/open-protocols/SS-LR.pdf>`
 
