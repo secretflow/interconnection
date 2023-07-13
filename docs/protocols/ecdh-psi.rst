@@ -16,7 +16,7 @@ ECDH-PSI 协议
 
 握手所用的 HandshakeRequest 定义如下：
 
-.. literalinclude:: ../../interconnection/algos/psi.proto
+.. literalinclude:: ../../interconnection/legacy/algos/psi.proto
    :caption: interconnection/algos/psi.proto
    :language: Protobuf
    :start-after: [Sphinx doc begin anchor: HandshakeRequest]
@@ -32,7 +32,7 @@ HandshakeRequest 主要包括以下信息：
 
 如果算法是 Ecdh-psi，则 HandshakeRequest 中的 algo_params 字段格式如下：
 
-.. literalinclude:: ../../interconnection/algos/psi.proto
+.. literalinclude:: ../../interconnection/legacy/algos/psi.proto
    :caption: interconnection/algos/psi.proto
    :language: Protobuf
    :start-after: [Sphinx doc begin anchor: EcdhPsiParamsProposal]
@@ -41,7 +41,7 @@ HandshakeRequest 主要包括以下信息：
 
 握手请求的结果 HandshakeResponse 定义如下：
 
-.. literalinclude:: ../../interconnection/algos/psi.proto
+.. literalinclude:: ../../interconnection/legacy/algos/psi.proto
    :caption: interconnection/algos/psi.proto
    :language: Protobuf
    :start-after: [Sphinx doc begin anchor: HandshakeResponse]
@@ -59,7 +59,7 @@ HandshakeRequest 主要包括以下信息：
 
 algo_params 定义如下：
 
-.. literalinclude:: ../../interconnection/algos/psi.proto
+.. literalinclude:: ../../interconnection/legacy/algos/psi.proto
    :caption: interconnection/algos/psi.proto
    :language: Protobuf
    :start-after: [Sphinx doc begin anchor: EcdhPsiParamsResult]
@@ -82,7 +82,7 @@ Protobuf 传输使用《传输层白盒互联互通协议》中的 P2P 传输协
 
 算法第二步、第四步使用 EcdhPsiCipherBatch 格式进行传输，EcdhPsiCipherBatch 定义如下：
 
-.. literalinclude:: ../../interconnection/algos/psi.proto
+.. literalinclude:: ../../interconnection/legacy/algos/psi.proto
    :caption: interconnection/algos/psi.proto
    :language: Protobuf
    :start-after: [Sphinx doc begin anchor: EcdhPsiCipherBatch]

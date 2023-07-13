@@ -22,6 +22,7 @@ package org.interconnection.v2.algos;
 //  Protos used in HandshakeRequest  //
 //===================================//
 
+// [Sphinx doc begin anchor: LrHyperparamsProposal]
 message LrHyperparamsProposal {
   repeated int32 supported_versions = 1;
 
@@ -36,7 +37,9 @@ message LrHyperparamsProposal {
   bool use_l1_norm = 5;
   bool use_l2_norm = 6;
 }
+// [Sphinx doc end anchor: LrHyperparamsProposal]
 
+// [Sphinx doc begin anchor: LrDataIoProposal]
 message LrDataIoProposal {
   repeated int32 supported_versions = 1;
 
@@ -49,11 +52,13 @@ message LrDataIoProposal {
   // 是否有标签(Y)
   bool has_label = 4;
 }
+// [Sphinx doc end anchor: LrDataIoProposal]
 
 //===================================//
 //  Protos used in HandshakeResponse //
 //===================================//
 
+// [Sphinx doc begin anchor: LrHyperparamsResult]
 message LrHyperparamsResult {
   // 版本号
   int32 version = 1;
@@ -84,7 +89,9 @@ message LrHyperparamsResult {
   // L2 正则项
   double l2_norm = 9;
 }
+// [Sphinx doc end anchor: LrHyperparamsResult]
 
+// [Sphinx doc begin anchor: LrDataIoResult]
 message LrDataIoResult {
   int32 version = 1;
 
@@ -98,9 +105,12 @@ message LrDataIoResult {
   // 哪一方持有标签
   int32 label_rank = 4;
 }
+// [Sphinx doc end anchor: LrDataIoResult]
 
+// [Sphinx doc begin anchor: LastBatchPolicy]
 // Policy to process the partial last batch of each epoch
 enum LastBatchPolicy {
   LAST_BATCH_POLICY_UNSPECIFIED = 0;
   LAST_BATCH_POLICY_DISCARD = 1;
 }
+// [Sphinx doc end anchor: LastBatchPolicy]

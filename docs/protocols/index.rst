@@ -8,3 +8,4 @@
 
    transport
    ecdh-psi
+   ss-lr
