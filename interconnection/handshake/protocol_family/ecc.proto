@@ -20,6 +20,7 @@ package org.interconnection.v2.protocol;
 //            Common defs            //
 //===================================//
 
+// [Sphinx doc begin anchor: EcSuit]
 // Suit of <curve, hash, hash2curve_strategy>
 message EcSuit {
   // ref enum CurveType
@@ -31,6 +32,7 @@ message EcSuit {
   // ref enum HashToCurveStrategy
   int32 hash2curve_strategy = 3;
 }
+// [Sphinx doc end anchor: EcSuit]
 
 enum CurveType {
   CURVE_TYPE_UNSPECIFIED = 0;
@@ -184,6 +186,7 @@ enum PointOctetFormat {
 //  Protos used in HandshakeRequest  //
 //===================================//
 
+// [Sphinx doc begin anchor: EccProtocolProposal]
 message EccProtocolProposal {
   repeated int32 supported_versions = 1;
 
@@ -197,11 +200,13 @@ message EccProtocolProposal {
   // Whether to enable the optimization method: secondary ciphertext truncation
   bool support_point_truncation = 4;
 }
+// [Sphinx doc end anchor: EccProtocolProposal]
 
 //===================================//
 //  Protos used in HandshakeResponse  //
 //===================================//
 
+// [Sphinx doc begin anchor: EccProtocolResult]
 message EccProtocolResult {
   int32 version = 1;
 
@@ -215,3 +220,4 @@ message EccProtocolResult {
   // -1 means disable this optimization (do not truncation)
   int32 bit_length_after_truncated = 4;
 }
+// [Sphinx doc end anchor: EccProtocolResult]
