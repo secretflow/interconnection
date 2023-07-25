@@ -17,6 +17,7 @@ syntax = "proto3";
 
 package org.interconnection.v2.runtime;
 
+// [Sphinx doc begin anchor: EcdhPsiCipherBatch]
 // ECDH PSI 密文传输
 message EcdhPsiCipherBatch {
   // The type hint for each message. (密文类型)
@@ -54,3 +55,4 @@ message EcdhPsiCipherBatch {
   // NOTE: we do not use `repeated`` here to save overhead of metadata.
   bytes ciphertext = 7;
 }
+// [Sphinx doc end anchor: EcdhPsiCipherBatch]
