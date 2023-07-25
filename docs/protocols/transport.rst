@@ -87,10 +87,10 @@ P2P 通信允许在任意两个参与者之间发送信息。P2P 通信 key 的�
 .. code-block:: text
    :linenos:
 
-   Rank 0 → 1 发送消息，key 为：root:P2P-0:0->1
-   Rank 1 → 0 发送消息，key 为：root:P2P-0:1->0
-   Rank 0 → 2 发送消息，key 为：root:P2P-0:0->2
    Rank 0 → 1 发送消息，key 为：root:P2P-1:0->1
+   Rank 1 → 0 发送消息，key 为：root:P2P-1:1->0
+   Rank 0 → 2 发送消息，key 为：root:P2P-1:0->2
+   Rank 0 → 1 发送消息，key 为：root:P2P-2:0->1
 
 
 Scatter
@@ -110,20 +110,20 @@ Scatter 操作所有参与方使用相同的 key 通信，key 命名规则为：
    :linenos:
 
    时间点1：RANK 0 Scatter
-   RANK 0 构建 PushRequest 发送给 RANK 1，其中 key 为 root:0:SCATTER
-   RANK 0 构建 PushRequest 发送给 RANK 2，其中 key 为 root:0:SCATTER
-   RANK 0 构建 PushRequest 发送给 RANK 3，其中 key 为 root:0:SCATTER
-   RANK 1 接收 key 为 root:0:SCATTER 的数据
-   RANK 2 接收 key 为 root:0:SCATTER 的数据
-   RANK 3 接收 key 为 root:0:SCATTER 的数据
-
-   时间点2：RANK 1 Scatter
-   RANK 1 构建 PushRequest 发送给 RANK 0，其中 key 为 root:1:SCATTER
-   RANK 1 构建 PushRequest 发送给 RANK 2，其中 key 为 root:1:SCATTER
-   RANK 1 构建 PushRequest 发送给 RANK 3，其中 key 为 root:1:SCATTER
-   RANK 0 接收 key 为 root:1:SCATTER 的数据
+   RANK 0 构建 PushRequest 发送给 RANK 1，其中 key 为 root:1:SCATTER
+   RANK 0 构建 PushRequest 发送给 RANK 2，其中 key 为 root:1:SCATTER
+   RANK 0 构建 PushRequest 发送给 RANK 3，其中 key 为 root:1:SCATTER
+   RANK 1 接收 key 为 root:1:SCATTER 的数据
    RANK 2 接收 key 为 root:1:SCATTER 的数据
    RANK 3 接收 key 为 root:1:SCATTER 的数据
+
+   时间点2：RANK 1 Scatter
+   RANK 1 构建 PushRequest 发送给 RANK 0，其中 key 为 root:2:SCATTER
+   RANK 1 构建 PushRequest 发送给 RANK 2，其中 key 为 root:2:SCATTER
+   RANK 1 构建 PushRequest 发送给 RANK 3，其中 key 为 root:2:SCATTER
+   RANK 0 接收 key 为 root:2:SCATTER 的数据
+   RANK 2 接收 key 为 root:2:SCATTER 的数据
+   RANK 3 接收 key 为 root:2:SCATTER 的数据
 
 
 Gather
@@ -140,13 +140,13 @@ Gather 通信 Key 的命名规则为：``{信道名称}:{信道全局计数器}:
 .. code-block:: text
    :linenos:
 
-   时间点1：RANK 0 Gather
-   RANK 1 构建 PushRequest 发送给 RANK 0，其中 key 为 root:2:GATHER
-   RANK 2 构建 PushRequest 发送给 RANK 0，其中 key 为 root:2:GATHER
-   RANK 3 构建 PushRequest 发送给 RANK 0，其中 key 为 root:2:GATHER
-   RANK 0 接收 来自 RANK 1 的 key 为 root:2:GATHER 的数据
-   RANK 0 接收 来自 RANK 2 的 key 为 root:2:GATHER 的数据
-   RANK 0 接收 来自 RANK 3 的 key 为 root:2:GATHER 的数据
+   时间点3：RANK 0 Gather
+   RANK 1 构建 PushRequest 发送给 RANK 0，其中 key 为 root:3:GATHER
+   RANK 2 构建 PushRequest 发送给 RANK 0，其中 key 为 root:3:GATHER
+   RANK 3 构建 PushRequest 发送给 RANK 0，其中 key 为 root:3:GATHER
+   RANK 0 接收 来自 RANK 1 的 key 为 root:3:GATHER 的数据
+   RANK 0 接收 来自 RANK 2 的 key 为 root:3:GATHER 的数据
+   RANK 0 接收 来自 RANK 3 的 key 为 root:3:GATHER 的数据
 
 其它算法
 ^^^^^^^^^^^^^^^^^^
