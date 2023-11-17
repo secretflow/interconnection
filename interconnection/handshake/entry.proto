@@ -116,6 +116,7 @@ enum AlgoType {
   ALGO_TYPE_UNSPECIFIED = 0;
   ALGO_TYPE_ECDH_PSI = 1;
   ALGO_TYPE_SS_LR = 2;
+  ALGO_TYPE_SGB = 3;
 }
 // [Sphinx doc end anchor: AlgoType]
 

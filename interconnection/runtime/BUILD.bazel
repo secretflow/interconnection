@@ -19,11 +19,23 @@ package(default_visibility = ["//visibility:public"])
 proto_library(
     name = "runtime",
     deps = [
+        ":data_exchange",
         ":ecdh_psi",
+        ":phe",
     ],
 )
 
 proto_library(
     name = "ecdh_psi",
     srcs = ["ecdh_psi.proto"],
+)
+
+proto_library(
+    name = "data_exchange",
+    srcs = ["data_exchange.proto"],
+)
+
+proto_library(
+    name = "phe",
+    srcs = ["phe.proto"],
 )
