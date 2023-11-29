@@ -219,5 +219,14 @@ message EccProtocolResult {
   // optimization method: secondary ciphertext truncation
   // -1 means disable this optimization (do not truncation)
   int32 bit_length_after_truncated = 4;
+
+  // Which rank can receive the psi results.
+  //
+  // 确定 PSI 结果获取方。
+  //
+  // NOTES:
+  //   `-1`: all parties (所有机构都可以拿到交集结果)
+  //   `>= 0`: corresponding rank can get the results (指定机构拿到交集结果)
+  int32 result_to_rank = 5;
 }
 // [Sphinx doc end anchor: EccProtocolResult]
