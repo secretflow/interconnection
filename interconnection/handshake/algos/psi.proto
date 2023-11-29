@@ -17,7 +17,7 @@ syntax = "proto3";
 package org.interconnection.v2.algos;
 
 // [Sphinx doc begin anchor: PsiDataIoProposal]
-message PsiDataIoProposal {
+message PsiDataInfoProposal {
   repeated int32 supported_versions = 1;
 
   // How many items do I've.
@@ -37,7 +37,7 @@ message PsiDataIoProposal {
 // [Sphinx doc end anchor: PsiDataIoProposal]
 
 // [Sphinx doc begin anchor: PsiDataIoResult]
-message PsiDataIoResult {
+message PsiDataInfoResult {
   int32 version = 1;
 
   // 确定 PSI 结果获取方。
