@@ -21,49 +21,13 @@ jobs:
     docker:
       - image: registry.hub.docker.com/secretflow/release-ci:latest
     resource_class: 2xlarge
-    parameters:
-      python_ver:
-        type: string
     shell: /bin/bash --login -eo pipefail
     steps:
       - checkout
       - run:
           name: "build package and publish"
           command: |
-            conda create -n build python=<< parameters.python_ver >> -y
-            conda activate build
-
-            sh ./build_wheel_entrypoint.sh
-            ls dist/*.whl
-
-            python3 -m pip install twine
-            python3 -m twine upload -r pypi -u __token__ -p ${PYPI_TWINE_TOKEN} dist/*.whl
-  macOS_x64_publish:
-    macos:
-      xcode: 13.0.0
-    environment:
-      HOMEBREW_NO_AUTO_UPDATE: 1
-    resource_class: large
-    parameters:
-      python_ver:
-        type: string
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            brew install bazelisk cmake ninja nasm libomp wget
-      - run:
-          name: Install Miniconda
-          command: |
-            wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
-            bash ~/miniconda.sh -b -p $HOME/miniconda
-            source $HOME/miniconda/bin/activate
-            conda init bash zsh
-      - run:
-          name: "build package and publish"
-          command: |
-            conda create -n build python=<< parameters.python_ver >> -y
+            conda create -n build python=3.8 -y
             conda activate build
 
             sh ./build_wheel_entrypoint.sh
@@ -77,9 +41,6 @@ jobs:
     environment:
       HOMEBREW_NO_AUTO_UPDATE: 1
     resource_class: macos.m1.large.gen1
-    parameters:
-      python_ver:
-        type: string
     steps:
       - checkout
       - run:
@@ -96,7 +57,7 @@ jobs:
       - run:
           name: "build package and publish"
           command: |
-            conda create -n build python=<< parameters.python_ver >> -y
+            conda create -n build python=3.8 -y
             conda activate build
 
             sh ./build_wheel_entrypoint.sh
@@ -107,28 +68,13 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  publish:
-    when: << pipeline.parameters.GHA_Action >>
+  dev-publish:
     jobs:
       - linux_publish:
-          matrix:
-            parameters:
-              python_ver: [ "3.8", "3.9", "3.10", "3.11" ]
           filters:
             tags:
-                only: /.*/
-      - macOS_x64_publish:
-          matrix:
-            parameters:
-              python_ver: [ '3.8', '3.9', '3.10', '3.11' ]
-          filters:
-            tags:
-                only: /.*/
+              only: /.*/
       - macOS_arm64_publish:
-          matrix:
-            parameters:
-              python_ver: [ '3.8', '3.9', '3.10', '3.11' ]
           filters:
             tags:
-                only: /.*/
-
+              only: /.*/
