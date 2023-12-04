@@ -1,0 +1,53 @@
+# Copyright 2023 Ant Group Co., Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+version: 2.1
+
+setup: true
+
+orbs:
+  continuation: circleci/continuation@0.3.1
+
+parameters:
+  GHA_Actor:
+    type: string
+    default: ""
+  GHA_Action:
+    type: string
+    default: ""
+  GHA_Event:
+    type: string
+    default: ""
+  GHA_Meta:
+    type: string
+    default: ""
+
+workflows:
+  publish-workflow:
+    when:
+      equal: [ "release", << pipeline.parameters.GHA_Event >> ]
+    jobs:
+      - continuation/continue:
+          configuration_path: .circleci/release-config.yml
+          # This is mandatory to trigger a pipeline when pushing a tag
+          filters:
+            tags:
+              only: /.*(?<!dev\d{8})$/
+      - continuation/continue:
+          configuration_path: .circleci/dev-release-config.yml
+          # This is mandatory to trigger a pipeline when pushing a tag
+          filters:
+            tags:
+              only: /.*(?<=dev\d{8})$/
+
