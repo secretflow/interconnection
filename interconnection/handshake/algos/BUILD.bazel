@@ -13,6 +13,8 @@
 # limitations under the License.
 
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:proto.bzl", "py_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -24,14 +26,33 @@ proto_library(
     ],
 )
 
+py_library(
+    name = "algos_py_proto",
+    deps = [
+        ":lr_py_proto",
+        ":psi_py_proto",
+        ":sgb_py_proto",
+    ],
+    data = [":create_init_file"],
+)
+
 proto_library(
     name = "lr",
     srcs = ["lr.proto"],
     deps = [
         ":optimizer",
-        "//interconnection/common",
         "@com_google_protobuf//:any_proto",
     ],
+)
+
+proto_library(
+    name = "optimizer",
+    srcs = ["optimizer.proto"],
+)
+
+py_proto_library(
+    name = "lr_py_proto",
+    deps = [":lr"],
 )
 
 proto_library(
@@ -39,7 +60,23 @@ proto_library(
     srcs = ["psi.proto"],
 )
 
+py_proto_library(
+    name = "psi_py_proto",
+    deps = [":psi"],
+)
+
 proto_library(
-    name = "optimizer",
-    srcs = ["optimizer.proto"],
+    name = "sgb",
+    srcs = ["sgb.proto"],
+)
+
+py_proto_library(
+    name = "sgb_py_proto",
+    deps = [":sgb"],
+)
+
+genrule(
+    name = "create_init_file",
+    outs = ["__init__.py"],
+    cmd = "touch $@",
 )
