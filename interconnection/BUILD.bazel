@@ -12,39 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_python//python:defs.bzl", "py_library")
-load("@rules_python//python:proto.bzl", "py_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
-proto_library(
-    name = "op",
-    deps = [
-        ":sigmoid",
-    ],
-)
-
 py_library(
-    name = "op_py_proto",
+    name = "ic_py_proto",
     deps = [
-        ":sigmoid_py_proto",
+        "//interconnection/handshake:handshake_py_proto",
+        "//interconnection/runtime:runtime_py_proto",
     ],
     data = [":create_init_file"],
 )
 
-proto_library(
-    name = "sigmoid",
-    srcs = ["sigmoid.proto"],
-)
-
-py_proto_library(
-    name = "sigmoid_py_proto",
-    deps = [":sigmoid"],
-)
-
 genrule(
     name = "create_init_file",
-    outs = ["__init__.py"],
+    outs = [
+        "__init__.py",
+    ],
     cmd = "touch $@",
 )

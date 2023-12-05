@@ -11,3 +11,11 @@ bazel-*
 ~$*.doc*
 
 docs/_build/
+
+# pycharm
+.idea/
+
+# setup files
+build/
+dist/
+*.egg-info

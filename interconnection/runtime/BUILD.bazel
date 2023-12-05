@@ -13,6 +13,8 @@
 # limitations under the License.
 
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:proto.bzl", "py_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -25,9 +27,24 @@ proto_library(
     ],
 )
 
+py_library(
+    name = "runtime_py_proto",
+    deps = [
+        ":data_exchange_py_proto",
+        ":ecdh_psi_py_proto",
+        ":phe_py_proto",
+    ],
+    data = [":create_init_file"],
+)
+
 proto_library(
     name = "ecdh_psi",
     srcs = ["ecdh_psi.proto"],
+)
+
+py_proto_library(
+    name = "ecdh_psi_py_proto",
+    deps = [":ecdh_psi"],
 )
 
 proto_library(
@@ -35,7 +52,23 @@ proto_library(
     srcs = ["data_exchange.proto"],
 )
 
+py_proto_library(
+    name = "data_exchange_py_proto",
+    deps = [":data_exchange"],
+)
+
 proto_library(
     name = "phe",
     srcs = ["phe.proto"],
+)
+
+py_proto_library(
+    name = "phe_py_proto",
+    deps = [":phe"],
+)
+
+genrule(
+    name = "create_init_file",
+    outs = ["__init__.py"],
+    cmd = "touch $@",
 )

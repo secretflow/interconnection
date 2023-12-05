@@ -1,4 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:proto.bzl", "py_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -7,7 +9,24 @@ proto_library(
     deps = ["header"],
 )
 
+py_library(
+    name = "common_py_proto",
+    deps = [":header_py_proto"],
+    data = [":create_init_file"],
+)
+
 proto_library(
     name = "header",
     srcs = ["header.proto"],
+)
+
+py_proto_library(
+    name = "header_py_proto",
+    deps = [":header"],
+)
+
+genrule(
+    name = "create_init_file",
+    outs = ["__init__.py"],
+    cmd = "touch $@",
 )

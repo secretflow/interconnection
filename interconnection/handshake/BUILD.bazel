@@ -13,6 +13,8 @@
 # limitations under the License.
 
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:proto.bzl", "py_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -26,6 +28,18 @@ proto_library(
     ],
 )
 
+py_library(
+    name = "handshake_py_proto",
+    deps = [
+        ":entry_py_proto",
+        "//interconnection/common:common_py_proto",  # to create init file in common directory
+        "//interconnection/handshake/algos:algos_py_proto",
+        "//interconnection/handshake/op:op_py_proto",
+        "//interconnection/handshake/protocol_family:protocol_family_py_proto",
+    ],
+    data = [":create_init_file"],
+)
+
 proto_library(
     name = "entry",
     srcs = ["entry.proto"],
@@ -33,4 +47,15 @@ proto_library(
         "//interconnection/common",
         "@com_google_protobuf//:any_proto",
     ],
+)
+
+py_proto_library(
+    name = "entry_py_proto",
+    deps = [":entry"],
+)
+
+genrule(
+    name = "create_init_file",
+    outs = ["__init__.py"],
+    cmd = "touch $@",
 )
