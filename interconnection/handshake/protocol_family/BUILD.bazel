@@ -28,12 +28,12 @@ proto_library(
 
 py_library(
     name = "protocol_family_py_proto",
+    data = [":create_init_file"],
     deps = [
         ":ecc_py_proto",
-        ":ss_py_proto",
         ":phe_py_proto",
+        ":ss_py_proto",
     ],
-    data = [":create_init_file"],
 )
 
 proto_library(

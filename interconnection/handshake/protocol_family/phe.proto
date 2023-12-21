@@ -41,6 +41,11 @@ message PaillierParamsProposal {
   repeated int32 key_sizes = 1;
 }
 
+message EcElGamalProposal {
+  // Curve 的编号定义在 ecc.proto 中的 enum CurveType 中
+  repeated int32 curve_name = 1;
+}
+
 //===================================//
 //  Protos used in HandshakeResponse //
 //===================================//
@@ -53,4 +58,9 @@ message PheProtocolResult {
 
 message PaillierParamsResult {
   int32 key_size = 1;
+}
+
+message EcElGamalResult {
+  // Curve 的编号定义在 ecc.proto 中的 enum CurveType 中
+  int32 curve_name = 1;
 }

@@ -38,6 +38,7 @@ enum CurveType {
   CURVE_TYPE_UNSPECIFIED = 0;
   CURVE_TYPE_CURVE25519 = 1;
   CURVE_TYPE_SM2 = 2;
+  CURVE_TYPE_ED25519 = 3;
 }
 
 enum HashType {

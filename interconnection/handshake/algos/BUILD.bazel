@@ -28,12 +28,12 @@ proto_library(
 
 py_library(
     name = "algos_py_proto",
+    data = [":create_init_file"],
     deps = [
         ":lr_py_proto",
         ":psi_py_proto",
         ":sgb_py_proto",
     ],
-    data = [":create_init_file"],
 )
 
 proto_library(

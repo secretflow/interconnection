@@ -30,6 +30,7 @@ proto_library(
 
 py_library(
     name = "handshake_py_proto",
+    data = [":create_init_file"],
     deps = [
         ":entry_py_proto",
         "//interconnection/common:common_py_proto",  # to create init file in common directory
@@ -37,7 +38,6 @@ py_library(
         "//interconnection/handshake/op:op_py_proto",
         "//interconnection/handshake/protocol_family:protocol_family_py_proto",
     ],
-    data = [":create_init_file"],
 )
 
 proto_library(

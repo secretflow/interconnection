@@ -6,13 +6,13 @@ package(default_visibility = ["//visibility:public"])
 
 proto_library(
     name = "common",
-    deps = ["header"],
+    deps = [":header"],
 )
 
 py_library(
     name = "common_py_proto",
-    deps = [":header_py_proto"],
     data = [":create_init_file"],
+    deps = [":header_py_proto"],
 )
 
 proto_library(
