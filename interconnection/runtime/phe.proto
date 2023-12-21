@@ -23,11 +23,28 @@ message Bigint {
   bytes little_endian_value = 2;  // absolute value encoded in little endian format
 }
 
-message PublicKey {
+message PaillierPublicKey {
   Bigint n = 1;
   Bigint hs = 2;
 }
 
-message Ciphertext {
+message PaillierCiphertext {
   Bigint c = 1;
+}
+
+// EC ElGamal runtime data exchange format //
+
+message EcElGamalPublicKey {
+  // Curve 的编号定义在 ecc.proto 中的 enum CurveType 中
+  int32 curve_name = 1;
+  // 序列化后的点，POINT_OCTET_FORMAT_X962_COMPRESSED 格式
+  // 格式说明见 ecc.proto 中的 enum PointOctetFormat
+  bytes h = 2;
+}
+
+message EcElGamalCiphertext {
+  // 序列化后的点，POINT_OCTET_FORMAT_X962_COMPRESSED 格式
+  // 格式说明见 ecc.proto 中的 enum PointOctetFormat
+  bytes c1 = 1;
+  bytes c2 = 2;
 }

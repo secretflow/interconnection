@@ -18,11 +18,11 @@ package(default_visibility = ["//visibility:public"])
 
 py_library(
     name = "ic_py_proto",
+    data = [":create_init_file"],
     deps = [
         "//interconnection/handshake:handshake_py_proto",
         "//interconnection/runtime:runtime_py_proto",
     ],
-    data = [":create_init_file"],
 )
 
 genrule(

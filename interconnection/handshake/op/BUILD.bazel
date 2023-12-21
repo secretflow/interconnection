@@ -27,10 +27,10 @@ proto_library(
 
 py_library(
     name = "op_py_proto",
+    data = [":create_init_file"],
     deps = [
         ":sigmoid_py_proto",
     ],
-    data = [":create_init_file"],
 )
 
 proto_library(

@@ -29,12 +29,12 @@ proto_library(
 
 py_library(
     name = "runtime_py_proto",
+    data = [":create_init_file"],
     deps = [
         ":data_exchange_py_proto",
         ":ecdh_psi_py_proto",
         ":phe_py_proto",
     ],
-    data = [":create_init_file"],
 )
 
 proto_library(
