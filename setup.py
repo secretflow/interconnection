@@ -120,16 +120,6 @@ if not SKIP_BAZEL_CLEAN:
 
 build()
 
-# Default Linux platform tag
-plat_name = "manylinux2014_x86_64"
-
-if sys.platform == "darwin":
-    # Due to a bug in conda x64 python, platform tag has to be 10_16 for X64 wheel
-    if platform.machine() == "x86_64":
-        plat_name = "macosx_10_16_x86_64"
-    else:
-        plat_name = "macosx_11_0_arm64"
-
 setup(
     name=setup_spec.name,
     version=setup_spec.version,
@@ -153,5 +143,5 @@ setup(
     setup_requires=["wheel"],
     extras_require=setup_spec.extras,
     license="Apache 2.0",
-    options={'bdist_wheel': {'plat_name': plat_name}},
+    options={'bdist_wheel': {'plat_name': 'any'}},
 )
