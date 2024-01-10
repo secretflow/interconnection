@@ -21,16 +21,13 @@ jobs:
     docker:
       - image: registry.hub.docker.com/secretflow/release-ci:latest
     resource_class: 2xlarge
-    parameters:
-      python_ver:
-        type: string
     shell: /bin/bash --login -eo pipefail
     steps:
       - checkout
       - run:
           name: "build package and publish"
           command: |
-            conda create -n build python=<< parameters.python_ver >> -y
+            conda create -n build python=3.8 -y
             conda activate build
 
             sh ./build_wheel_entrypoint.sh
@@ -43,10 +40,7 @@ jobs:
       xcode: 13.0.0
     environment:
       HOMEBREW_NO_AUTO_UPDATE: 1
-    resource_class: large
-    parameters:
-      python_ver:
-        type: string
+    resource_class: macos.x86.medium.gen2
     steps:
       - checkout
       - run:
@@ -63,7 +57,7 @@ jobs:
       - run:
           name: "build package and publish"
           command: |
-            conda create -n build python=<< parameters.python_ver >> -y
+            conda create -n build python=3.8 -y
             conda activate build
 
             sh ./build_wheel_entrypoint.sh
@@ -77,9 +71,6 @@ jobs:
     environment:
       HOMEBREW_NO_AUTO_UPDATE: 1
     resource_class: macos.m1.large.gen1
-    parameters:
-      python_ver:
-        type: string
     steps:
       - checkout
       - run:
@@ -96,7 +87,7 @@ jobs:
       - run:
           name: "build package and publish"
           command: |
-            conda create -n build python=<< parameters.python_ver >> -y
+            conda create -n build python=3.8 -y
             conda activate build
 
             sh ./build_wheel_entrypoint.sh
@@ -111,23 +102,14 @@ workflows:
     when: << pipeline.parameters.GHA_Action >>
     jobs:
       - linux_publish:
-          matrix:
-            parameters:
-              python_ver: [ "3.8", "3.9", "3.10", "3.11" ]
           filters:
             tags:
                 only: /.*/
       - macOS_x64_publish:
-          matrix:
-            parameters:
-              python_ver: [ '3.8', '3.9', '3.10', '3.11' ]
           filters:
             tags:
                 only: /.*/
       - macOS_arm64_publish:
-          matrix:
-            parameters:
-              python_ver: [ '3.8', '3.9', '3.10', '3.11' ]
           filters:
             tags:
                 only: /.*/
