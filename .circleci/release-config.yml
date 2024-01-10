@@ -30,7 +30,7 @@ jobs:
       - run:
           name: "build package and publish"
           command: |
-            conda create -n build python=<< parameters.python_ver >> -y
+            conda create -n build python=3.8 -y
             conda activate build
 
             sh ./build_wheel_entrypoint.sh
@@ -43,7 +43,7 @@ jobs:
       xcode: 13.0.0
     environment:
       HOMEBREW_NO_AUTO_UPDATE: 1
-    resource_class: large
+    resource_class: macos.x86.medium.gen2
     parameters:
       python_ver:
         type: string
@@ -63,7 +63,7 @@ jobs:
       - run:
           name: "build package and publish"
           command: |
-            conda create -n build python=<< parameters.python_ver >> -y
+            conda create -n build python=3.8 -y
             conda activate build
 
             sh ./build_wheel_entrypoint.sh
@@ -96,7 +96,7 @@ jobs:
       - run:
           name: "build package and publish"
           command: |
-            conda create -n build python=<< parameters.python_ver >> -y
+            conda create -n build python=3.8 -y
             conda activate build
 
             sh ./build_wheel_entrypoint.sh
@@ -111,23 +111,14 @@ workflows:
     when: << pipeline.parameters.GHA_Action >>
     jobs:
       - linux_publish:
-          matrix:
-            parameters:
-              python_ver: [ "3.8", "3.9", "3.10", "3.11" ]
           filters:
             tags:
                 only: /.*/
       - macOS_x64_publish:
-          matrix:
-            parameters:
-              python_ver: [ '3.8', '3.9', '3.10', '3.11' ]
           filters:
             tags:
                 only: /.*/
       - macOS_arm64_publish:
-          matrix:
-            parameters:
-              python_ver: [ '3.8', '3.9', '3.10', '3.11' ]
           filters:
             tags:
                 only: /.*/
