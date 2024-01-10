@@ -21,9 +21,6 @@ jobs:
     docker:
       - image: registry.hub.docker.com/secretflow/release-ci:latest
     resource_class: 2xlarge
-    parameters:
-      python_ver:
-        type: string
     shell: /bin/bash --login -eo pipefail
     steps:
       - checkout
@@ -44,9 +41,6 @@ jobs:
     environment:
       HOMEBREW_NO_AUTO_UPDATE: 1
     resource_class: macos.x86.medium.gen2
-    parameters:
-      python_ver:
-        type: string
     steps:
       - checkout
       - run:
@@ -77,9 +71,6 @@ jobs:
     environment:
       HOMEBREW_NO_AUTO_UPDATE: 1
     resource_class: macos.m1.large.gen1
-    parameters:
-      python_ver:
-        type: string
     steps:
       - checkout
       - run:
