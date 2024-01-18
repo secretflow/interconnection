@@ -9,6 +9,7 @@
 
 - [ECDH-PSI 协议](./PPCA/open-protocols/ECDH-PSI.pdf)
 - [SS-LR 协议](./PPCA/open-protocols/SS-LR.pdf)
+- [SGB 协议](./PPCA/open-protocols/SGB.pdf)
 
 ## 目录结构
 

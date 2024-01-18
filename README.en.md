@@ -9,3 +9,5 @@ Currently supported protocols:
 
 - Transport layer protocol
 - ECDH-PSI protocol
+- SS-LR protocol
+- SGB protocol
