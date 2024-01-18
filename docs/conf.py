@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "Interconnection"
-copyright = "2022 Ant Group Co., Ltd"
+copyright = "2022-2024 Ant Group Co., Ltd"
 author = "Secretflow Authors"
 
 # -- Multi-language config ---------------------------------------------------

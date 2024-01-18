@@ -25,3 +25,9 @@
 
 :download:`点击下载<../../PPCA/open-protocols/SS-LR.pdf>`
 
+开放协议 第4部分：SGB
+^^^^^^^^^^^^^^^^^^^^^
+
+本文件规定了异构隐私计算平台进行跨平台的 SGB 的互联互通的算法协议和传输层实现参考。
+
+:download:`点击下载<../../PPCA/open-protocols/SGB.pdf>`
