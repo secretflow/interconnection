@@ -74,16 +74,6 @@ def bazel_invoke(invoker, cmdline, *args, **kwargs):
 
 
 def build():
-    if tuple(sys.version_info[:2]) not in SUPPORTED_PYTHONS:
-        msg = (
-            "Detected Python version {}, which is not supported. "
-            "Only Python {} are supported."
-        ).format(
-            ".".join(map(str, sys.version_info[:2])),
-            ", ".join(".".join(map(str, v)) for v in SUPPORTED_PYTHONS),
-        )
-        raise RuntimeError(msg)
-
     bazel_env = dict(os.environ, PYTHON3_BIN_PATH=sys.executable)
 
     bazel_flags = ["--verbose_failures"]
