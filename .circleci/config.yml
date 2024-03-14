@@ -14,11 +14,6 @@
 
 version: 2.1
 
-setup: true
-
-orbs:
-  continuation: circleci/continuation@0.3.1
-
 parameters:
   GHA_Actor:
     type: string
@@ -33,14 +28,32 @@ parameters:
     type: string
     default: ""
 
+jobs:
+  linux_publish:
+    docker:
+      - image: registry.hub.docker.com/secretflow/release-ci:latest
+    resource_class: large
+    shell: /bin/bash --login -eo pipefail
+    steps:
+      - checkout
+      - run:
+          name: "build package and publish"
+          command: |
+            conda create -n build python=3.10 -y
+            conda activate build
+
+            sh ./build_wheel_entrypoint.sh
+            ls dist/*.whl
+
+            python3 -m pip install twine
+            python3 -m twine upload -r pypi -u __token__ -p ${PYPI_TWINE_TOKEN} dist/*.whl
+
 workflows:
   publish-workflow:
     when:
       equal: [ "release", << pipeline.parameters.GHA_Event >> ]
     jobs:
-      - continuation/continue:
-          configuration_path: .circleci/release-config.yml
-          # This is mandatory to trigger a pipeline when pushing a tag
+      - linux_publish:
           filters:
             tags:
-              only: /.*/
+                only: /.*/

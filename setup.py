@@ -24,13 +24,7 @@ import sys
 
 from setuptools import setup, find_packages
 
-# 3.8 is the minimum python version we can support
-SUPPORTED_PYTHONS = [(3, 8), (3, 9), (3, 10), (3, 11)]
-
-BAZEL_MAX_JOBS = os.getenv("BAZEL_MAX_JOBS")
 ROOT_DIR = os.path.dirname(__file__)
-SKIP_BAZEL_CLEAN = os.getenv("SKIP_BAZEL_CLEAN")
-
 
 def find_version(*filepath):
     # Extract version information from filepath
@@ -93,9 +87,6 @@ def build():
     bazel_env = dict(os.environ, PYTHON3_BIN_PATH=sys.executable)
 
     bazel_flags = ["--verbose_failures"]
-    if BAZEL_MAX_JOBS:
-        n = int(BAZEL_MAX_JOBS)  # the value must be an int
-        bazel_flags.append(f"--jobs={n}")
 
     bazel_precmd_flags = []
 
@@ -115,9 +106,6 @@ build_dir = os.path.join(ROOT_DIR, "build")
 if os.path.isdir(build_dir):
     shutil.rmtree(build_dir)
 
-if not SKIP_BAZEL_CLEAN:
-    bazel_invoke(subprocess.check_call, ['clean'])
-
 build()
 
 setup(
@@ -132,10 +120,7 @@ setup(
     long_description_content_type='text/markdown',
     url="https://github.com/secretflow/interconnection",
     classifiers=[
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3",
     ],
     packages=find_packages(where="bazel-bin"),
     package_dir={"": "bazel-bin"},
