@@ -40,10 +40,10 @@ def interconnection_deps():
     maybe(
         http_archive,
         name = "com_google_protobuf",
-        sha256 = "e815887fcd7d5a91e94c1efbf46d48b6db32928c14f71987f6018f7afd115983",
-        strip_prefix = "protobuf-3.19.6",
+        sha256 = "2c6a36c7b5a55accae063667ef3c55f2642e67476d96d355ff0acb13dbb47f09",
+        strip_prefix = "protobuf-21.12",
         type = "tar.gz",
         urls = [
-            "https://github.com/protocolbuffers/protobuf/releases/download/v3.19.6/protobuf-all-3.19.6.tar.gz",
+            "https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.tar.gz",
         ],
     )
