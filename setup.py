@@ -26,6 +26,7 @@ from setuptools import setup, find_packages
 
 ROOT_DIR = os.path.dirname(__file__)
 
+
 def find_version(*filepath):
     # Extract version information from filepath
     with open(os.path.join(ROOT_DIR, *filepath)) as fp:
@@ -60,14 +61,14 @@ setup_spec = SetupSpec(
 )
 
 
-setup_spec.install_requires = read_requirements('requirements.txt')
+setup_spec.install_requires = read_requirements("requirements.txt")
 
 
 # Calls Bazel in PATH
 def bazel_invoke(invoker, cmdline, *args, **kwargs):
     try:
         print(f'Invoke command: bazel {" ".join(cmdline)}')
-        result = invoker(['bazel'] + cmdline, *args, **kwargs)
+        result = invoker(["bazel"] + cmdline, *args, **kwargs)
         return result
     except IOError:
         raise
@@ -88,7 +89,7 @@ def build():
         subprocess.check_call,
         bazel_precmd_flags + ["build"] + bazel_flags + ["--"] + bazel_targets,
         env=bazel_env,
-        )
+    )
 
 
 # Ensure no remaining lib files.
@@ -102,12 +103,12 @@ setup(
     name=setup_spec.name,
     version=setup_spec.version,
     author="SecretFlow Team",
-    author_email='secretflow-contact@service.alipay.com',
+    author_email="secretflow-contact@service.alipay.com",
     description=(setup_spec.description),
     long_description=io.open(
         os.path.join(ROOT_DIR, "README.md"), "r", encoding="utf-8"
     ).read(),
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     url="https://github.com/secretflow/interconnection",
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -118,5 +119,5 @@ setup(
     setup_requires=["wheel"],
     extras_require=setup_spec.extras,
     license="Apache 2.0",
-    options={'bdist_wheel': {'plat_name': 'any'}},
+    options={"bdist_wheel": {"plat_name": "any"}},
 )
