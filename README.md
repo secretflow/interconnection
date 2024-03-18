@@ -1,21 +1,54 @@
-# 隐私计算平台互联互通协议
+# 隐私计算平台开放算法协议
 
-本仓库存放隐私计算平台互联互通协议（接口）文档。请注意当前的接口、协议文档还不是最终稳定版，不排除某些接口可能会做变更。
+## 背景
+
+本仓库用于存放隐私计算平台开放算法协议接口，旨在将算法接口通过程序化设计语言 Protobuf 更加全面、精确地表述出来，帮助隐私计算平台开发者更好地实施互联互通改造，促进隐私计算算法的互联互通。
 
 协议文档地址：[https://www.secretflow.org.cn/docs/interconnection/](https://www.secretflow.org.cn/docs/interconnection/)
 
+本仓库接口符合北京金融科技产业联盟（简称：金科联盟）隐私计算跨平台互联互通团体标准、信通院牵头隐私计算联盟互联互通团体标准要求，其中握手协商部分两个标准略有差异：
 
-当前已经定义的互联互通协议（接口）有:
+- 金科联盟标准定义了完整的隐私计算平台框架，算法组件运行所需的配置全部由管理层的工作流配置模块（原名 DAG&CONF 模块）下发，因此不再需要握手协议
+- 隐私计算联盟标准并未对算法组件之外的其它模块做过多假设，因此所有算法均有握手协商过程，从而提升开放算法独立部署、运行的可行性
 
-- [ECDH-PSI 协议](./PPCA/open-protocols/ECDH-PSI.pdf)
-- [SS-LR 协议](./PPCA/open-protocols/SS-LR.pdf)
-- [SGB 协议](./PPCA/open-protocols/SGB.pdf)
+隐语采用可选的握手协商过程，从而同时兼容两大标准。至于开放算法的协议主体在两联盟的标准中一致。
 
-## 目录结构
+<table>
+    <tr>
+        <td></td>
+        <td>金科联盟标准</td>
+        <td>隐私计算联盟标准</td>
+        <td>本仓库</td>
+    <tr>
+    <tr>
+        <td>算法运行参数</td>
+        <td>由管理层工作流配置模块下发</td>
+        <td>参与方运行握手协商协议自行对齐参数</td>
+        <td>定义了完整的握手协商接口，如对方采用金科联盟方式，可跳过此部分接口</td>
+    <tr>
+    <tr>
+        <td>算法协议主体</td>
+        <td colspan="2" style="text-align: center;">协议流程、接口一致</td>
+        <td>定义了完整的协议主体运行所需接口</td>
+    <tr>
+</table>
+
+### 相关仓库
+
+| 仓库                                                                              | 说明                                 |
+|---------------------------------------------------------------------------------|------------------------------------|
+| [InterOp](https://github.com/secretflow/interop)                                | 金科联盟互联互通研究成果官方仓库                   |
+| [caict-ppca/privacy-computing](https://github.com/caict-ppca/privacy-computing) | 隐私计算联盟互联互通研究成果官方仓库                 |
+| [interconnection](https://github.com/secretflow/interconnection) (本仓库）          | 隐语收集、定义的互联互通开放算法协议接口、文档            |
+| [interconnection-impl](https://github.com/secretflow/interconnection-impl)      | 互联互通开放算法协议的参考实现，支持 Python & C++ 语言 |
+
+注: 仓库排名不分先后
+
+## Interconnection 仓库结构
 
 ```
 .
-├── PPCA   # 存放隐私计算联盟归口的标准协议文件
+├── PPCA   # 存放隐私计算联盟归口的标准协议文件副本
 ├── docs   # 文档网站的网页源代码
 └── interconnection    # 所有接口文件
     ├── common     # 通用的接口定义
@@ -30,9 +63,17 @@
 
 ```
 
-## 协议设计范式
+当前已经定义的互联互通协议（接口）有:
 
-目前所有的开放协议都分为握手协议和算法主体两部分，其中握手协议用于对齐算法版本、算法运行所需参数等，并遵循一些统一的范式：
+- [ECDH-PSI 协议](./PPCA/open-protocols/ECDH-PSI.pdf)
+- [SS-LR 协议](./PPCA/open-protocols/SS-LR.pdf)
+- [SGB 协议](./PPCA/open-protocols/SGB.pdf)
+
+注：本仓库收集、存放的互联互通接口仅为金科联盟、隐私计算联盟标准的子集，完整的接口、文档请参考各联盟的官方仓库。
+
+## 握手协议设计范式
+
+隐私计算联盟所有算法协议都包含握手协议和算法主体两部分，其中握手协议用于对齐算法版本、算法运行所需参数等，并遵循一些统一的范式：
 
 1. 所有算法都复用同一套握手协议，即所有算法的握手请求都用的是 `interconnection/handshake/entry.proto` 中定义的 `HandshakeRequest`，所有算法的握手协商结果都使用 `HandshakeResponse` 格式。
 2. 对于多个参与方的算法，我们为每个参与方赋予一个编号，称为 rank，rank 的数值从 0 开始依次递增。
@@ -40,8 +81,6 @@
 4. `HandshakeRequest` 中每一类具体的参数项，其命名风格一般为 XxxProposal，`HandshakeResponse` 中选定的参数项，其命名风格一般为 XxxResult。
 5. 对于某些连续数值型参数，例如深度学习中的 learning_rate 等，我们假设无论参数选择几对功能无影响，对方都应该支持，这一类参数不需要协商，而是由 rank-0 选定一个数值，在 `HandshakeResponse` 中发给大家。
 6. 对于一些可枚举的功能性参数，`HandshakeRequest` 用一个列表表示，表示发送者支持列表所列的功能；并且这个列表是有序的，表示发送者更加偏爱列表中靠前的参数。例如 ECDH-PSI 中的椭圆曲线(EC)类型，假如请求列表是 `[SM2, CURVE25519]`，则表示发送者同时支持 SM2 和 CURVE25519，如果其他参与方也同时支持这两种 EC，则协商者应当优先选择 SM2, 因为 SM2 排在前面。当然，如果多个参数方发送的列表顺序是矛盾的，协商者会优先满足大多数参与方的偏爱。
-
-算法主体部分因算法而异，请以具体协议文档为准。
 
 
 ## 算法协议与传输层关系

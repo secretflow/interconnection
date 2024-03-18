@@ -18,6 +18,10 @@ load("//bazel:repositories.bzl", "interconnection_deps")
 
 interconnection_deps()
 
+load("@rules_python//python:repositories.bzl", "py_repositories")
+
+py_repositories()
+
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
