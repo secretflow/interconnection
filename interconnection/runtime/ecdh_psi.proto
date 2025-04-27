@@ -54,5 +54,19 @@ message EcdhPsiCipherBatch {
   //
   // NOTE: we do not use `repeated`` here to save overhead of metadata.
   bytes ciphertext = 7;
+
+  // The extra count map records the number of repetitions of the element at
+  // this batch.
+  //
+  // Because PSI protocal does not support intersection with
+  // duplicate key values, we use this field to represent the additional number
+  // of repetitions of the element at this index. The KEY value is the index of
+  // the element in the ciphertext that appears more than once, and the VALUE is
+  // the number of times the element appears minus one.
+  //
+  // For example, if the elements are [1, 2, 3, 3, 4, 5, 5, 5], the ciphertext
+  // is [Enc(1), Enc(2), Enc(3), Enc(4), Enc(5)], then the
+  // duplicate_item_cnt_map would be {2: 1, 4: 2}.
+  map<uint32, uint32> duplicate_item_cnt_map = 8;
 }
 // [Sphinx doc end anchor: EcdhPsiCipherBatch]
