@@ -79,7 +79,11 @@ workflows:
                 only: /.*/
       - docs_publish:
           filters:
+            tags:
+              only: /.*/
+  docs-workflow:
+    jobs:
+      - docs_publish:
+          filters:
             branches:
               only: main
-            tags:
-              only: /^v.*/
