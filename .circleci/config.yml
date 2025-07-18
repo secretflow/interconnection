@@ -47,6 +47,7 @@ jobs:
 
             python3 -m pip install twine
             python3 -m twine upload -r pypi -u __token__ -p ${PYPI_TWINE_TOKEN} dist/*.whl
+
 workflows:
   publish-workflow:
     when:
